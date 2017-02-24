@@ -15,5 +15,5 @@
   
 People  | Platform | Technology | Link 
 --------|----------|------------|------
-JekaK[https://github.com/JekaK] | Android  | Java       | https://github.com/JekaK/PicturePlease
-Verden[https://github.com/Verrden]  | Android  | Java       |
+[JekaK](https://github.com/JekaK) | Android  | Java       | https://github.com/JekaK/PicturePlease
+[Verden](https://github.com/Verrden)  | Android  | Java       |
