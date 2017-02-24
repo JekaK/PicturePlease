@@ -13,7 +13,3 @@
 ### Кому это будет инетерсно?
   Возможно, кому то еще, кроме омежек- разработчиков. Потенциальная аудитория - люди молодого возраста, компании и просто ценители одиночества.
   
-People  | Platform | Technology | Link 
---------|----------|------------|------
-[JekaK](https://github.com/JekaK) | Android  | Java       | https://github.com/JekaK/PicturePlease
-[Verden](https://github.com/Verrden)  | Android  | Java       |
