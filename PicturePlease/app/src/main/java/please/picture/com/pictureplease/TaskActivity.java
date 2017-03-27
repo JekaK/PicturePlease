@@ -12,6 +12,6 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.task_page);
+        setContentView(R.layout.registration_page);
     }
 }
