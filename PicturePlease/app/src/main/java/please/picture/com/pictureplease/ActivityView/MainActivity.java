@@ -1,4 +1,4 @@
-package please.picture.com.pictureplease;
+package please.picture.com.pictureplease.ActivityView;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -12,14 +12,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import please.picture.com.pictureplease.FragmentView.FirstFragment;
+import please.picture.com.pictureplease.R;
+import please.picture.com.pictureplease.FragmentView.RatingFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
-    // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
-    // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
@@ -54,32 +56,23 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new FirstFragment();
                 break;
             case R.id.nav_second_fragment:
-                fragment = new Rating();
+                fragment = new RatingFragment();
                 break;
             default:
                  fragment = new FirstFragment();
         }
 
-       /* try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
 
-        // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
-        // Highlight the selected item has been done by NavigationView
+
         menuItem.setChecked(true);
-        // Set action bar title
         setTitle(menuItem.getTitle());
-        // Close the navigation drawer
         mDrawer.closeDrawers();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawer.openDrawer(GravityCompat.START);

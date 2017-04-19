@@ -1,8 +1,10 @@
-package please.picture.com.pictureplease;
+package please.picture.com.pictureplease.ActivityView;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import please.picture.com.pictureplease.R;
 
 /**
  * Created by jeka on 22.03.17.
