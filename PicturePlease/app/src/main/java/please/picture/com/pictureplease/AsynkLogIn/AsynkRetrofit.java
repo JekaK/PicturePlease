@@ -1,12 +1,9 @@
 package please.picture.com.pictureplease.AsynkLogIn;
 
-import org.json.JSONObject;
-
 import please.picture.com.pictureplease.Entity.User;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.http.Body;
-import retrofit2.http.Headers;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
@@ -14,6 +11,11 @@ import retrofit2.http.POST;
  */
 
 public interface AsynkRetrofit {
+    @FormUrlEncoded
     @POST("checkUser")
-    Call<User> checkUser(@Body User user);
+    Call<User> checkUser(@Field("email") String email, @Field("pass") String pass);
+
+    @FormUrlEncoded
+    @POST("getUserInfo")
+    Call<User> getUserInfo(@Field("id") Integer id);
 }

@@ -40,35 +40,64 @@ public class LogInActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("from button");
-                User user = new User(email.getText().toString(), pass.getText().toString());
-                sendNetworkRequest(user);
-                System.out.println("from button2");
+                sendCheckRequest(email.getText().toString(), pass.getText().toString());
             }
         });
     }
 
-    public void sendNetworkRequest(User user) {
-
+    public void sendCheckRequest(String email, String pass) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://pictureplease.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
-        System.out.println("From send");
         AsynkRetrofit client = retrofit.create(AsynkRetrofit.class);
-        Call<User> call = client.checkUser(user);
+        Call<User> call = client.checkUser(email, pass);
+
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(LogInActivity.this);
+        progressDialog.setTitle("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+
+        progressDialog.show();
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                System.out.println("From response: "+ response.body().getId());
-                Toast.makeText(LogInActivity.this.getApplicationContext(), "Yeah id: " + response.body().getId(), Toast.LENGTH_LONG);
+                getUserInfoRequest(response.body().getIdUser(), progressDialog);
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(LogInActivity.this, "Failure", Toast.LENGTH_LONG);
+                progressDialog.dismiss();
+                Toast.makeText(LogInActivity.this.getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    public void getUserInfoRequest(Integer id, final ProgressDialog dialog) {
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://pictureplease.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+        System.out.println("From another net method");
+
+        Retrofit retrofit = builder.build();
+        AsynkRetrofit client = retrofit.create(AsynkRetrofit.class);
+        Call<User> call = client.getUserInfo(id);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                dialog.dismiss();
+                Toast.makeText(LogInActivity.this.getApplicationContext(), response.body().getEmail(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(LogInActivity.this.getApplicationContext(),
+                        t.toString(), Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }
