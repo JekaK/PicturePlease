@@ -24,11 +24,14 @@ public class User {
     private String pass;
     @SerializedName("Photo")
     @Expose
-    private String photo;
+    private String photoPath;
 
     public User(String email, String pass) {
         this.email = email;
         this.pass = pass;
+    }
+
+    public User() {
     }
 
     public Integer getIdUser() {
@@ -64,10 +67,10 @@ public class User {
     }
 
     public String getPhoto() {
-        return photo;
+        return photoPath;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhoto(String photoPath) {
+        this.photoPath = photoPath;
     }
 }

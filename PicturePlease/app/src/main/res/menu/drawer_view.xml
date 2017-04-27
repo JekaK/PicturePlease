@@ -23,6 +23,7 @@
                     android:icon="@drawable/settings"
                     android:title="Settings" />
                 <item
+                    android:id="@+id/exit"
                     android:icon="@drawable/exit"
                     android:title="Exit" />
             </group>
