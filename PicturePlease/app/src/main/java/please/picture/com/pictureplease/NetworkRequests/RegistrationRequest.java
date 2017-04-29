@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import please.picture.com.pictureplease.ActivityView.LogInActivity;
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.Asynk.RegistrationRetrofitAsynk;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -66,4 +67,5 @@ public class RegistrationRequest {
             }
         });
     }
+
 }

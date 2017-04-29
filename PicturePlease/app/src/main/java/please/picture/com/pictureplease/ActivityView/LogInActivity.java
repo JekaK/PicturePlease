@@ -41,6 +41,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LogInActivity.this, RegistrationActivity.class));
+                finish();
             }
         });
         String baseUrl = getResources().getString(R.string.BASE_URL);
