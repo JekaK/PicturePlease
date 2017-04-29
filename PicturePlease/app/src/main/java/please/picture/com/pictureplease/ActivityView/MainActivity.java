@@ -1,15 +1,13 @@
 package please.picture.com.pictureplease.ActivityView;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +16,9 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import please.picture.com.pictureplease.FragmentView.FirstFragment;
-import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
+import please.picture.com.pictureplease.FragmentView.TaskFragment;
+import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
 
@@ -35,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView email, login;
     private SessionManager sessionManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,18 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, new FirstFragment()).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, new TaskFragment()).commit();
+
 
         sessionManager = new SessionManager(MainActivity.this);
         if (!sessionManager.isLoggedIn()) {
             sessionManager.checkLogin();
         } else {
-
+            init();
             navHeader = nvDrawer.getHeaderView(0);
             photoUser = (ImageView) navHeader.findViewById(R.id.photoUser);
             HashMap<String, String> user = sessionManager.getUserDetails();
-
             if (user.get("photo").equals("desiredFilename.jpg")) {
                 Bitmap b = new BitmapOperations(getApplicationContext())
                         .getThumbnail(user.get(SessionManager.KEY_PHOTO));
@@ -77,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void init() {
+
+
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -90,11 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
+        android.support.v4.app.Fragment fragment = null;
 
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                fragment = new FirstFragment();
+                fragment = new TaskFragment();
                 break;
             case R.id.nav_second_fragment:
                 fragment = new RatingFragment();
@@ -103,11 +107,11 @@ public class MainActivity extends AppCompatActivity {
                 sessionManager.logoutUser();
             }
             default:
-                fragment = new FirstFragment();
+                fragment = new TaskFragment();
         }
 
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
 

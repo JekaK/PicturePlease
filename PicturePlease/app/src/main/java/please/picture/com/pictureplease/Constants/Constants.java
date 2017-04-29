@@ -5,5 +5,5 @@ package please.picture.com.pictureplease.Constants;
  */
 
 public class Constants {
-    public static String BASE_URL = "http://pictureplease.herokuapp.com/";
+    public static String BASE_URL = "http://pictureplease.herokuapp.com";
 }
