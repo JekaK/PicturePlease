@@ -3,7 +3,6 @@ package please.picture.com.pictureplease.ActivityView;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.design.widget.NavigationView;
 
 import android.support.v4.view.GravityCompat;
@@ -19,14 +18,11 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import please.picture.com.pictureplease.Entity.User;
 import please.picture.com.pictureplease.FragmentView.FirstFragment;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
-import please.picture.com.pictureplease.SavedPreferences.SaveBitmap;
+import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
-
-import static please.picture.com.pictureplease.R.layout.nav_header;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,15 +55,17 @@ public class MainActivity extends AppCompatActivity {
         if (!sessionManager.isLoggedIn()) {
             sessionManager.checkLogin();
         } else {
-            HashMap<String, String> user = sessionManager.getUserDetails();
-            Bitmap b = new SaveBitmap(getApplicationContext())
-                    .getThumbnail(user.get(SessionManager.KEY_PHOTO));
 
             navHeader = nvDrawer.getHeaderView(0);
             photoUser = (ImageView) navHeader.findViewById(R.id.photoUser);
-            photoUser.setImageBitmap(b);
-            photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
+            HashMap<String, String> user = sessionManager.getUserDetails();
 
+            if (user.get("photo").equals("desiredFilename.jpg")) {
+                Bitmap b = new BitmapOperations(getApplicationContext())
+                        .getThumbnail(user.get(SessionManager.KEY_PHOTO));
+                photoUser.setImageBitmap(b);
+                photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
+            }
             String loginString = user.get(SessionManager.KEY_LOGIN);
             String emailString = user.get(SessionManager.KEY_EMAIL);
 
@@ -101,8 +99,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_second_fragment:
                 fragment = new RatingFragment();
                 break;
-            case R.id.exit:
+            case R.id.exit: {
                 sessionManager.logoutUser();
+            }
             default:
                 fragment = new FirstFragment();
         }

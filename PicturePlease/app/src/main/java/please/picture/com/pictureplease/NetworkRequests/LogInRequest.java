@@ -3,7 +3,6 @@ package please.picture.com.pictureplease.NetworkRequests;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +13,9 @@ import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import please.picture.com.pictureplease.ActivityView.MainActivity;
-import please.picture.com.pictureplease.AsynkLogIn.AsynkRetrofit;
+import please.picture.com.pictureplease.Asynk.LogInRetrofitAsynk;
 import please.picture.com.pictureplease.Entity.User;
-import please.picture.com.pictureplease.R;
-import please.picture.com.pictureplease.SavedPreferences.SaveBitmap;
+import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,12 +29,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LogInRequest {
     private Context context;
-    private Resources resources;
+    private String baseUrl;
     private SessionManager manager;
 
-    public LogInRequest(Context context, Resources resources) {
+    public LogInRequest(Context context, String baseUrl) {
         this.context = context;
-        this.resources = resources;
+        this.baseUrl = baseUrl;
+
     }
 
     public Context getContext() {
@@ -47,42 +46,14 @@ public class LogInRequest {
         this.context = context;
     }
 
-    public void sendCheckRequest(String email, String pass) {
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://pictureplease.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = builder.build();
-        AsynkRetrofit client = retrofit.create(AsynkRetrofit.class);
-        Call<User> call = client.checkUser(email, pass);
 
-        final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Loading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-
-        progressDialog.show();
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                getUserInfoRequest(response.body().getIdUser(), progressDialog);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(context, "Failure", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void getUserInfoRequest(Integer id, final ProgressDialog dialog) {
+    public void getUserInfoRequest(Integer id, final ProgressDialog progressDialog) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://pictureplease.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create());
         final User[] user = new User[1];
         Retrofit retrofit = builder.build();
-        final AsynkRetrofit client = retrofit.create(AsynkRetrofit.class);
+        LogInRetrofitAsynk client = retrofit.create(LogInRetrofitAsynk.class);
         Call<User> call = client.getUserInfo(id);
         call.enqueue(new Callback<User>() {
             @Override
@@ -90,22 +61,21 @@ public class LogInRequest {
                 user[0] = response.body();
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url(resources.getString(R.string.BASE_URL).concat(response.body().getPhoto()))
+                        .url(baseUrl.concat(response.body().getPhoto()))
                         .build();
                 okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
                     @Override
                     public void onFailure(okhttp3.Call call, IOException e) {
-
                     }
 
                     @Override
                     public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                         Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        new SaveBitmap(context, bitmap).
-                                saveImage(new SaveBitmap.callback() {
+                        new BitmapOperations(context, bitmap).
+                                saveImage(new BitmapOperations.callback() {
                                     @Override
                                     public void done() {
-                                        dialog.dismiss();
+                                        progressDialog.dismiss();
                                         Intent intent = new Intent(context, MainActivity.class);
                                         manager = new SessionManager(context);
                                         manager.createLoginSession(user[0].getIdUser(),
@@ -114,7 +84,7 @@ public class LogInRequest {
                                                 user[0].getPass(),
                                                 "desiredFilename.jpg");
                                         context.startActivity(intent);
-                                        ((AppCompatActivity)context).finish();
+                                        ((AppCompatActivity) context).finish();
                                     }
                                 });
                     }
@@ -124,7 +94,7 @@ public class LogInRequest {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                dialog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(context.getApplicationContext(),
                         t.toString(), Toast.LENGTH_LONG).show();
 

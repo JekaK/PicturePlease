@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.HashMap;
 
 import please.picture.com.pictureplease.ActivityView.LogInActivity;
+import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 
 /**
  * Created by jeka on 27.04.17.
@@ -19,10 +20,12 @@ public class SessionManager {
     private SharedPreferences pref;
     private Editor editor;
     private Context context;
+    private BitmapOperations bitmapOperations;
     private int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "UserInfo";
 
     private static final String IS_LOGIN = "IsLoggedIn";
+
 //{"id_user":9,"login_name":"Loud","email":"krukun1998@gmail.com","pass":"1","Photo":"/User/9.jpg"}
 
     public static final String KEY_ID = "id";
@@ -37,6 +40,7 @@ public class SessionManager {
 
     public SessionManager(Context context) {
         this.context = context;
+        this.bitmapOperations = new BitmapOperations(context);
         pref = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
@@ -74,8 +78,9 @@ public class SessionManager {
         Intent i = new Intent(context, LogInActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        bitmapOperations.deleteThumbnail("desiredFilename.jpg");
         context.startActivity(i);
-        ((AppCompatActivity)context).finish();
+        ((AppCompatActivity) context).finish();
     }
 
     public void checkLogin() {
@@ -84,7 +89,7 @@ public class SessionManager {
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
-            ((AppCompatActivity)context).finish();
+            ((AppCompatActivity) context).finish();
         }
     }
 

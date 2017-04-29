@@ -14,15 +14,15 @@ import java.io.FileOutputStream;
  * Created by jeka on 26.04.17.
  */
 
-public class SaveBitmap {
+public class BitmapOperations {
     private Context context;
     private Bitmap bitmap;
 
-    public SaveBitmap(Context context) {
+    public BitmapOperations(Context context) {
         this.context = context;
     }
 
-    public SaveBitmap(Context context, Bitmap bitmap) {
+    public BitmapOperations(Context context, Bitmap bitmap) {
         this.context = context;
         this.bitmap = bitmap;
     }
@@ -70,9 +70,7 @@ public class SaveBitmap {
     }
 
     public Bitmap getThumbnail(String filename) {
-
         Bitmap bitmap = null;
-
         try {
             if (isSdReadable()) {
                 bitmap = BitmapFactory.decodeFile(context.getFilesDir() + "/" + filename);
@@ -94,4 +92,15 @@ public class SaveBitmap {
         return bitmap;
     }
 
+    public void deleteThumbnail(String filename) {
+        try {
+            String fullPath = context.getFilesDir() + "/" + filename;
+            File file = new File(fullPath);
+            boolean deleted = file.delete();
+            System.out.println(deleted);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
