@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap b = new BitmapOperations(getApplicationContext())
                         .getThumbnail(user.get(SessionManager.KEY_PHOTO));
                 photoUser.setImageBitmap(b);
-                photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
+                //photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
             }
             String loginString = user.get(SessionManager.KEY_LOGIN);
             String emailString = user.get(SessionManager.KEY_EMAIL);
