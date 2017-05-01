@@ -28,10 +28,11 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ImageView photoUser;
-    private ActionBarDrawerToggle drawerToggle;
     private View navHeader;
     private TextView email, login;
     private SessionManager sessionManager;
+    private TextView title;
+    private ActionBarDrawerToggle mDrawerToggle;
 
 
     @Override
@@ -39,23 +40,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.include);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
 
+        title = (TextView) findViewById(R.id.toolbar_title);
         setupDrawerContent(nvDrawer);
         setSupportActionBar(toolbar);
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer,null,
+                R.string.OPEN, R.string.CLOSE) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawer.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, new TaskFragment()).commit();
-
 
         sessionManager = new SessionManager(MainActivity.this);
         if (!sessionManager.isLoggedIn()) {
             sessionManager.checkLogin();
         } else {
-            init();
             navHeader = nvDrawer.getHeaderView(0);
             photoUser = (ImageView) navHeader.findViewById(R.id.photoUser);
             HashMap<String, String> user = sessionManager.getUserDetails();
@@ -76,11 +99,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void init() {
-
-
-    }
-
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -90,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    public void setTitle(String t) {
+        title.setText(t);
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
@@ -102,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_second_fragment:
                 fragment = new RatingFragment();
+
                 break;
             case R.id.exit: {
                 sessionManager.logoutUser();
@@ -110,10 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new TaskFragment();
         }
 
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
 
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
