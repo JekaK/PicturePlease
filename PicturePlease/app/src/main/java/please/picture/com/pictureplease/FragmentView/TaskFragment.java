@@ -55,6 +55,10 @@ public class TaskFragment extends Fragment {
         tabLayout.setSelectedTabIndicatorHeight(5);
 
         tabLayout.setupWithViewPager(pager);
+        initDivider();
+        return root;
+    }
+    private void initDivider(){
         for (int i = 1; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             RelativeLayout relativeLayout = (RelativeLayout)
@@ -64,7 +68,6 @@ public class TaskFragment extends Fragment {
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
         }
-        return root;
     }
 
     @Override
