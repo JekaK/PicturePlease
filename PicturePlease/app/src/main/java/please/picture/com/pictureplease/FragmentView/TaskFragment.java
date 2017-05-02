@@ -74,7 +74,6 @@ public class TaskFragment extends Fragment {
             TextView tabTextView = (TextView) relativeLayout.findViewById(R.id.tab_title);
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
-
         }
     }
 

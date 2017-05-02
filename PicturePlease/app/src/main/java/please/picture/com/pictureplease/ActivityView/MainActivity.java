@@ -15,14 +15,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import please.picture.com.pictureplease.CashingTasks;
+import please.picture.com.pictureplease.CacheTasks.TaskCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
-import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -151,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        new CashingTasks(this).deleteTasks();
+        TaskCache taskCache =
+                new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+        taskCache.deleteTasks();
+        taskCache.setPrefName(getResources().getString(R.string.DONE_PREF));
+        taskCache.deleteTasks();
     }
 
     @Override

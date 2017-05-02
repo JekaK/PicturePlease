@@ -13,5 +13,9 @@ import retrofit2.http.POST;
 public interface TasksRetrofitAsynk {
     @FormUrlEncoded
     @POST("sendTasks")
-    Call<Task[]> getTasks(@Field("id_user") Integer id_user);
+    Call<Task[]> getUndoneTasks(@Field("id_user") Integer id_user);
+
+    @FormUrlEncoded
+    @POST("getDoneTasks")
+    Call<Task[]> getDoneTasks(@Field("id_user") Integer id_user);
 }

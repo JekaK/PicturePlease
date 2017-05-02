@@ -1,50 +1,48 @@
-package please.picture.com.pictureplease;
+package please.picture.com.pictureplease.CacheTasks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.icu.text.DisplayContext;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.Entity.Task;
-import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 
 /**
  * Created by jeka on 02.05.17.
  */
 
-public class CashingTasks {
+public class TaskCache {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
     private int PRIVATE_MODE = 0;
-    private static final String PREF_NAME = "Tasks";
     private Gson gson;
-    private static final String IS_LOGIN = "IsLoggedIn";
+    private String prefName;
 
-
-    public static final String KEY_ARRAY = "tasks";
-
-    public CashingTasks(Context context) {
+    public TaskCache(Context context, String prefName) {
         this.context = context;
-        pref = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        this.prefName = prefName;
+        pref = this.context.getSharedPreferences(prefName, PRIVATE_MODE);
         editor = pref.edit();
         gson = new Gson();
     }
 
+    public void setPrefName(String prefName) {
+        this.prefName = prefName;
+    }
+
     public void saveTasks(Task[] tasks) {
-        editor.putString("tasks", gson.toJson(tasks));
+        editor.putString(prefName, gson.toJson(tasks));
         editor.commit();
     }
 
     public Task[] getTasks() {
         Type type = new TypeToken<Task[]>() {
         }.getType();
-        String json = pref.getString("tasks", null);
+        String json = pref.getString(prefName, null);
         Task[] tasks = gson.fromJson(json, type);
         return tasks;
     }

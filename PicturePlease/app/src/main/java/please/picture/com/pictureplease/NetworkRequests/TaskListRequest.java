@@ -32,15 +32,18 @@ public class TaskListRequest {
         public void afterLoad(Task[] list);
     }
 
-    public void loadTasksInfo(Integer id_user, final callback callback) {
+    public void loadTaskInfo(Integer id_user, final callback callback, boolean isUndone) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
 
         TasksRetrofitAsynk client = retrofit.create(TasksRetrofitAsynk.class);
-        Call<Task[]> call = client.getTasks(id_user);
-
+        Call<Task[]> call;
+        if (isUndone)
+            call = client.getUndoneTasks(id_user);
+        else
+            call = client.getDoneTasks(id_user);
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("Loading...");
@@ -61,4 +64,5 @@ public class TaskListRequest {
             }
         });
     }
+
 }

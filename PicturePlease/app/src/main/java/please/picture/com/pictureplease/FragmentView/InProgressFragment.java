@@ -11,7 +11,7 @@ import android.widget.GridView;
 import java.util.HashMap;
 
 import please.picture.com.pictureplease.Adapter.TaskAdapter;
-import please.picture.com.pictureplease.CashingTasks;
+import please.picture.com.pictureplease.CacheTasks.TaskCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
@@ -29,7 +29,7 @@ public class InProgressFragment extends Fragment {
     private SessionManager manager;
     private HashMap<String, String> user;
     private Task[] tasks;
-    private CashingTasks cashingTasks;
+    private TaskCache taskCache;
 
     public static InProgressFragment newInstance(int page) {
         InProgressFragment pageFragment = new InProgressFragment();
@@ -39,10 +39,6 @@ public class InProgressFragment extends Fragment {
         return pageFragment;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,27 +46,27 @@ public class InProgressFragment extends Fragment {
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
         listRequest = new TaskListRequest(getActivity());
-        cashingTasks = new CashingTasks(getActivity());
+        taskCache = new TaskCache(getActivity(), getResources().getString(R.string.INPROGRESS_PREF));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.in_progress_fragment, null);
-        tasks = cashingTasks.getTasks();
+        tasks = taskCache.getTasks();
         if (tasks == null) {
-            listRequest.loadTasksInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
+            listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
                     new TaskListRequest.callback() {
                         @Override
                         public void afterLoad(Task[] list) {
                             tasks = list;
-                            cashingTasks.saveTasks(tasks);
+                            taskCache.saveTasks(tasks);
                             adapter = new TaskAdapter(getActivity(), tasks);
                             gridView = (GridView) root.findViewById(R.id.gvMain);
                             gridView.setAdapter(adapter);
                             adjustGridView();
                         }
-                    });
+                    }, true);
         } else {
             adapter = new TaskAdapter(getActivity(), tasks);
             gridView = (GridView) root.findViewById(R.id.gvMain);
@@ -78,13 +74,6 @@ public class InProgressFragment extends Fragment {
             adjustGridView();
         }
         return root;
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArray("tasks", tasks);
     }
 
 
