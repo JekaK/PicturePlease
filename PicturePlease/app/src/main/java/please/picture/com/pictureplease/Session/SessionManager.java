@@ -38,6 +38,7 @@ public class SessionManager {
 
     public static final String KEY_PHOTO = "photo";
 
+
     public SessionManager(Context context) {
         this.context = context;
         this.bitmapOperations = new BitmapOperations(context);
@@ -56,6 +57,7 @@ public class SessionManager {
         editor.commit();
     }
 
+
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
 
@@ -71,6 +73,7 @@ public class SessionManager {
 
         return user;
     }
+
 
     public void logoutUser() {
         editor.clear();

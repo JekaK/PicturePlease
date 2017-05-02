@@ -3,6 +3,7 @@ package please.picture.com.pictureplease.ActivityView;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,10 +15,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import please.picture.com.pictureplease.CashingTasks;
+import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
+import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -33,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private TextView title;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private Task[] tasks;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer,null,
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, null,
                 R.string.OPEN, R.string.CLOSE) {
 
             /** Called when a drawer has settled in a completely closed state. */
@@ -66,14 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawer.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, new TaskFragment()).commit();
 
         sessionManager = new SessionManager(MainActivity.this);
         if (!sessionManager.isLoggedIn()) {
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 photoUser.setImageBitmap(b);
                 //photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
             }
+
             String loginString = user.get(SessionManager.KEY_LOGIN);
             String emailString = user.get(SessionManager.KEY_EMAIL);
 
@@ -97,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
             login.setText(loginString);
             email.setText(emailString);
         }
+        Fragment fragment = new TaskFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -139,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new CashingTasks(this).deleteTasks();
     }
 
     @Override

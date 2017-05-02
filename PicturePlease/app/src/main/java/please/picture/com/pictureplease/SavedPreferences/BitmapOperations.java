@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import please.picture.com.pictureplease.Callback.callback;
+
 /**
  * Created by jeka on 26.04.17.
  */
@@ -36,9 +38,6 @@ public class BitmapOperations {
         this.bitmap = bitmap;
     }
 
-    public interface callback {
-        public void done();
-    }
 
     public void saveImage(callback callback) {
         try {

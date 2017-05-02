@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.Asynk.LogInRetrofitAsynk;
+import please.picture.com.pictureplease.Callback.callback;
 import please.picture.com.pictureplease.Entity.User;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -72,7 +73,12 @@ public class LogInRequest {
                     public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
                         Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
                         new BitmapOperations(context, bitmap).
-                                saveImage(new BitmapOperations.callback() {
+                                saveImage(new callback() {
+                                    @Override
+                                    public void doFunction(Integer integer, ProgressDialog dialog) {
+
+                                    }
+
                                     @Override
                                     public void done() {
                                         progressDialog.dismiss();

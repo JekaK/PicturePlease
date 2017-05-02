@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import please.picture.com.pictureplease.Callback.callback;
 import please.picture.com.pictureplease.NetworkRequests.CheckRequest;
 import please.picture.com.pictureplease.NetworkRequests.LogInRequest;
 import please.picture.com.pictureplease.R;
@@ -51,10 +52,15 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (new Util(getApplicationContext()).isOnline()) {
-                    requestCheck.sendCheckRequest(email.getText().toString(), pass.getText().toString(), new CheckRequest.callback() {
+                    requestCheck.sendCheckRequest(email.getText().toString(), pass.getText().toString(), new callback() {
                         @Override
                         public void doFunction(Integer integer, ProgressDialog dialog) {
                             requestLogIn.getUserInfoRequest(integer, dialog);
+                        }
+
+                        @Override
+                        public void done() {
+
                         }
                     });
                 } else {

@@ -3,6 +3,7 @@ package please.picture.com.pictureplease.FragmentView;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -21,9 +22,14 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import please.picture.com.pictureplease.ActivityView.MainActivity;
+import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentAdapter.FragmentAdapter;
+import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
+import please.picture.com.pictureplease.Session.SessionManager;
 
 /**
  * Created by University on 24.03.2017.
@@ -33,6 +39,7 @@ public class TaskFragment extends Fragment {
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
     private TabLayout tabLayout;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,17 +65,19 @@ public class TaskFragment extends Fragment {
         initDivider();
         return root;
     }
-    private void initDivider(){
+
+    private void initDivider() {
         for (int i = 1; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             RelativeLayout relativeLayout = (RelativeLayout)
                     LayoutInflater.from(getActivity()).inflate(R.layout.tab_layout, tabLayout, false);
-
             TextView tabTextView = (TextView) relativeLayout.findViewById(R.id.tab_title);
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
+
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
