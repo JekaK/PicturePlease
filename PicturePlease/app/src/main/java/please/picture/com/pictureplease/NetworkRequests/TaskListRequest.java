@@ -30,6 +30,7 @@ public class TaskListRequest {
 
     public interface callback {
         public void afterLoad(Task[] list);
+        public void afterloadException();
     }
 
     public void loadTaskInfo(Integer id_user, final callback callback, boolean isUndone) {
@@ -44,23 +45,17 @@ public class TaskListRequest {
             call = client.getUndoneTasks(id_user);
         else
             call = client.getDoneTasks(id_user);
-        final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setTitle("Loading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+
 
         call.enqueue(new Callback<Task[]>() {
             @Override
             public void onResponse(Call<Task[]> call, Response<Task[]> response) {
-                progressDialog.dismiss();
                 callback.afterLoad(response.body());
             }
 
             @Override
             public void onFailure(Call<Task[]> call, Throwable t) {
-                progressDialog.dismiss();
+                callback.afterloadException();
             }
         });
     }

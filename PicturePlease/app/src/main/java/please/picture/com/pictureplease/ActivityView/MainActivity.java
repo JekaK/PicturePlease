@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private TextView title;
     private ActionBarDrawerToggle mDrawerToggle;
-    private Task[] tasks;
-    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
         TaskCache taskCache =
                 new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
         taskCache.deleteTasks();
-        taskCache.setPrefName(getResources().getString(R.string.DONE_PREF));
+        taskCache =
+                new TaskCache(this, getResources().getString(R.string.DONE_PREF));
         taskCache.deleteTasks();
     }
 

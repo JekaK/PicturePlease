@@ -30,9 +30,6 @@ public class TaskCache {
         gson = new Gson();
     }
 
-    public void setPrefName(String prefName) {
-        this.prefName = prefName;
-    }
 
     public void saveTasks(Task[] tasks) {
         editor.putString(prefName, gson.toJson(tasks));

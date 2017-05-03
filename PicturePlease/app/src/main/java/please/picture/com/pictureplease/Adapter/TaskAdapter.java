@@ -63,6 +63,10 @@ public class TaskAdapter extends ArrayAdapter {
         loader.init(config);
     }
 
+    public void setTasks(Task[] tasks) {
+        this.tasks = tasks;
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -75,7 +79,7 @@ public class TaskAdapter extends ArrayAdapter {
         street.setText(tasks[position].getStreet());
         ImageView photo = (ImageView) rootView.findViewById(R.id.place_image);
         photo.setScaleType(ImageView.ScaleType.FIT_XY);
-        loader.displayImage(Constants.BASE_URL.concat(tasks[position].getPhoto()), photo, options,new SimpleImageLoadingListener(){
+        loader.displayImage(Constants.BASE_URL.concat(tasks[position].getPhoto()), photo, options, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 spinner.setVisibility(View.VISIBLE);
@@ -92,5 +96,11 @@ public class TaskAdapter extends ArrayAdapter {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        tasks = null;
     }
 }

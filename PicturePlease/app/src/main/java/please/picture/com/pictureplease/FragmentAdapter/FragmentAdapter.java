@@ -22,10 +22,10 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: {
-                return InProgressFragment.newInstance(position);
+                return new InProgressFragment();
             }
             case 1: {
-                return DoneFragment.newInstance(position);
+                return new DoneFragment();
             }
         }
         return null;

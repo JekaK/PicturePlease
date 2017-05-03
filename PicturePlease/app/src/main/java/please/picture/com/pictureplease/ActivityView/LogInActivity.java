@@ -52,6 +52,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (new Util(getApplicationContext()).isOnline()) {
+
                     requestCheck.sendCheckRequest(email.getText().toString(), pass.getText().toString(), new callback() {
                         @Override
                         public void doFunction(Integer integer, ProgressDialog dialog) {

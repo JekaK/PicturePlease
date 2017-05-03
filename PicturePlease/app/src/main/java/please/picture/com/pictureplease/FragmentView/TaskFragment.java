@@ -1,30 +1,31 @@
 package please.picture.com.pictureplease.FragmentView;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
+import please.picture.com.pictureplease.Adapter.TaskAdapter;
+import please.picture.com.pictureplease.CacheTasks.TaskCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentAdapter.FragmentAdapter;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
@@ -75,12 +76,5 @@ public class TaskFragment extends Fragment {
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
         }
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refresh_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 }
