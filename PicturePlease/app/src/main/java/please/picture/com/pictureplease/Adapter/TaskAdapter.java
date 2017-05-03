@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.Entity.Task;
@@ -33,12 +34,12 @@ import please.picture.com.pictureplease.R;
 
 public class TaskAdapter extends ArrayAdapter {
     private final Activity context;
-    private Task[] tasks;
+    private List<Task> tasks;
     private ImageLoader loader;
     private DisplayImageOptions options;
     private ProgressBar spinner;
 
-    public TaskAdapter(Activity context, Task[] tasks) {
+    public TaskAdapter(Activity context, List<Task> tasks) {
         super(context, R.layout.task_card, tasks);
         this.context = context;
         this.tasks = tasks;
@@ -63,9 +64,6 @@ public class TaskAdapter extends ArrayAdapter {
         loader.init(config);
     }
 
-    public void setTasks(Task[] tasks) {
-        this.tasks = tasks;
-    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -75,11 +73,11 @@ public class TaskAdapter extends ArrayAdapter {
 
         TextView name = (TextView) rootView.findViewById(R.id.place_name);
         TextView street = (TextView) rootView.findViewById(R.id.place_street);
-        name.setText(tasks[position].getName());
-        street.setText(tasks[position].getStreet());
+        name.setText(tasks.get(position).getName());
+        street.setText(tasks.get(position).getStreet());
         ImageView photo = (ImageView) rootView.findViewById(R.id.place_image);
         photo.setScaleType(ImageView.ScaleType.FIT_XY);
-        loader.displayImage(Constants.BASE_URL.concat(tasks[position].getPhoto()), photo, options, new SimpleImageLoadingListener() {
+        loader.displayImage(Constants.BASE_URL.concat(tasks.get(position).getPhoto()), photo, options, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 spinner.setVisibility(View.VISIBLE);

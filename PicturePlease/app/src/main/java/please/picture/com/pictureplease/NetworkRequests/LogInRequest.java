@@ -75,7 +75,7 @@ public class LogInRequest {
                         new BitmapOperations(context, bitmap).
                                 saveImage(new callback() {
                                     @Override
-                                    public void doFunction(Integer integer, ProgressDialog dialog) {
+                                    public void getUserInfo(Integer integer, ProgressDialog dialog) {
 
                                     }
 

@@ -55,7 +55,7 @@ public class LogInActivity extends AppCompatActivity {
 
                     requestCheck.sendCheckRequest(email.getText().toString(), pass.getText().toString(), new callback() {
                         @Override
-                        public void doFunction(Integer integer, ProgressDialog dialog) {
+                        public void getUserInfo(Integer integer, ProgressDialog dialog) {
                             requestLogIn.getUserInfoRequest(integer, dialog);
                         }
 

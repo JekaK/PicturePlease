@@ -6,6 +6,7 @@ import android.content.Context;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import please.picture.com.pictureplease.Asynk.TasksRetrofitAsynk;
 import please.picture.com.pictureplease.Callback.callback;
@@ -29,33 +30,29 @@ public class TaskListRequest {
     }
 
     public interface callback {
-        public void afterLoad(Task[] list);
+        public void afterLoad(List<Task> inPr, List<Task> done);
+
         public void afterloadException();
     }
 
-    public void loadTaskInfo(Integer id_user, final callback callback, boolean isUndone) {
+    public void loadTaskInfo(Integer id_user, final callback callback) {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
         Retrofit retrofit = builder.build();
 
         TasksRetrofitAsynk client = retrofit.create(TasksRetrofitAsynk.class);
-        Call<Task[]> call;
-        if (isUndone)
-            call = client.getUndoneTasks(id_user);
-        else
-            call = client.getDoneTasks(id_user);
+        Call<TasksRetrofitAsynk.TasksStruct> call = client.getTasks(id_user);
 
-
-        call.enqueue(new Callback<Task[]>() {
+        call.enqueue(new Callback<TasksRetrofitAsynk.TasksStruct>() {
             @Override
-            public void onResponse(Call<Task[]> call, Response<Task[]> response) {
-                callback.afterLoad(response.body());
+            public void onResponse(Call<TasksRetrofitAsynk.TasksStruct> call, Response<TasksRetrofitAsynk.TasksStruct> response) {
+                callback.afterLoad(response.body().getInProgress(), response.body().getDone());
             }
 
             @Override
-            public void onFailure(Call<Task[]> call, Throwable t) {
-                callback.afterloadException();
+            public void onFailure(Call<TasksRetrofitAsynk.TasksStruct> call, Throwable t) {
+
             }
         });
     }

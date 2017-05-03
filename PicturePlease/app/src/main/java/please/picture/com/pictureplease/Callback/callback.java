@@ -7,7 +7,7 @@ import android.app.ProgressDialog;
  */
 
 public interface callback {
-    public void doFunction(Integer integer, ProgressDialog dialog);
+    public void getUserInfo(Integer integer, ProgressDialog dialog);
 
     public void done();
 

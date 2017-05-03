@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.Adapter.TaskAdapter;
@@ -31,7 +32,7 @@ public class InProgressFragment extends Fragment {
     private TaskListRequest listRequest;
     private SessionManager manager;
     private HashMap<String, String> user;
-    private Task[] tasks;
+    private List<Task> tasks;
     private TaskCache taskCache;
     private SwipeRefreshLayout swipeContainer;
     private View root;
@@ -44,64 +45,20 @@ public class InProgressFragment extends Fragment {
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
         listRequest = new TaskListRequest(getActivity());
-        taskCache = new TaskCache(getActivity(), getResources().getString(R.string.INPROGRESS_PREF));
+        taskCache = new TaskCache(getActivity(), getResources().getString(R.string.ALL));
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        tasks = taskCache.getTasks();
         root = inflater.inflate(R.layout.in_progress_fragment, null);
         gridView = (GridView) root.findViewById(R.id.gvMain);
-        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
-
-        if (tasks == null) {
-            loadTasks();
-        } else {
-            adapter = new TaskAdapter(getActivity(), tasks);
-            gridView.setAdapter(adapter);
-            adjustGridView();
-        }
-
-
-        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadTasks();
-            }
-        });
-
-        return root;
-    }
-
-    public void loadTasks() {
-        swipeContainer.setRefreshing(true);
-        listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
-                new TaskListRequest.callback() {
-                    @Override
-                    public void afterLoad(Task[] list) {
-                        tasks = list;
-                        reInitAdapter();
-                        swipeContainer.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void afterloadException() {
-                        tasks = new Task[0];
-                        reInitAdapter();
-                        swipeContainer.setRefreshing(false);
-                    }
-                }, true);
-    }
-
-    public void reInitAdapter() {
-        taskCache.deleteTasks();
-        taskCache.saveTasks(tasks);
-        adapter = new TaskAdapter(getActivity(), tasks);
+        adapter = new TaskAdapter(getActivity(), taskCache.getInPrTasks());
         gridView.setAdapter(adapter);
         adjustGridView();
+
+        return root;
     }
 
     private void adjustGridView() {

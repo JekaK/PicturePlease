@@ -9,12 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.CacheTasks.TaskCache;
@@ -32,17 +36,20 @@ public class TaskFragment extends Fragment {
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
     private TabLayout tabLayout;
-
-
-    public static TaskFragment newInstance(SavedState savedState) {
-        TaskFragment frag = new TaskFragment();
-        frag.setInitialSavedState(savedState);
-        return frag;
-    }
+    private TaskListRequest listRequest;
+    private SessionManager manager;
+    private HashMap<String, String> user;
+    private List<Task> tasksInPr, tasksDone;
+    private TaskCache taskCache;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        manager = new SessionManager(getActivity());
+        user = manager.getUserDetails();
+        listRequest = new TaskListRequest(getActivity());
+        taskCache = new TaskCache(getActivity(), getResources().getString(R.string.ALL));
 
     }
 
@@ -50,18 +57,50 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.task_fragment, null);
         pager = (ViewPager) root.findViewById(R.id.pager);
-        pagerAdapter = new FragmentAdapter(getChildFragmentManager());
-        pager.setAdapter(pagerAdapter);
-        ((MainActivity) getActivity()).setTitle("Tasks");
-
         tabLayout = (TabLayout) root.findViewById(R.id.tabs);
+        pagerAdapter = new FragmentAdapter(getChildFragmentManager());
+        ((MainActivity) getActivity()).setTitle("Tasks");
+        if (taskCache.getInPrTasks() == null || taskCache.getDoneTasks() == null)
+            loadTasks();
+        else {
+            pager.setAdapter(pagerAdapter);
+            tabLayout.setupWithViewPager(pager);
+        }
+
         tabLayout.setBackgroundResource(R.drawable.gradient);
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
         tabLayout.setSelectedTabIndicatorHeight(5);
-        tabLayout.setupWithViewPager(pager);
         initDivider();
         return root;
+    }
+
+    public void loadTasks() {
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
+                new TaskListRequest.callback() {
+
+                    @Override
+                    public void afterLoad(List<Task> inPr, List<Task> done) {
+                        tasksInPr = inPr;
+                        tasksDone = done;
+                        taskCache.deleteTasks();
+                        taskCache.saveTasks(inPr, done);
+                        pager.setAdapter(pagerAdapter);
+                        tabLayout.setupWithViewPager(pager);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void afterloadException() {
+
+                    }
+                });
     }
 
     private void initDivider() {
@@ -76,12 +115,21 @@ public class TaskFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh: {
+                loadTasks();
+            }
+            default: {
+                return super.onOptionsItemSelected(item);
+            }
+        }
+
     }
 }

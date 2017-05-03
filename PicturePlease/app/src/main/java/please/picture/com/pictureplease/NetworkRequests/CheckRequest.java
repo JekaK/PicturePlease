@@ -2,13 +2,11 @@ package please.picture.com.pictureplease.NetworkRequests;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.widget.Toast;
 
 import please.picture.com.pictureplease.Asynk.LogInRetrofitAsynk;
 import please.picture.com.pictureplease.Callback.callback;
 import please.picture.com.pictureplease.Entity.User;
-import please.picture.com.pictureplease.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +44,7 @@ public class CheckRequest {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                callback.doFunction(response.body().getIdUser(), progressDialog);
+                callback.getUserInfo(response.body().getIdUser(), progressDialog);
             }
 
             @Override

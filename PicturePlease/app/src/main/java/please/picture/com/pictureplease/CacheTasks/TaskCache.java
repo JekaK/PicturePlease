@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import please.picture.com.pictureplease.Entity.Task;
 
@@ -30,18 +32,32 @@ public class TaskCache {
         gson = new Gson();
     }
 
-
-    public void saveTasks(Task[] tasks) {
-        editor.putString(prefName, gson.toJson(tasks));
+    public void saveTasks(List<Task> inPr, List<Task> done) {
+        if (inPr == null) {
+            inPr = new ArrayList<>();
+        }
+        if (done == null) {
+            done = new ArrayList<>();
+        }
+        editor.putString("inProgress", gson.toJson(inPr));
+        editor.putString("done", gson.toJson(done));
         editor.commit();
     }
 
-    public Task[] getTasks() {
-        Type type = new TypeToken<Task[]>() {
+    public List<Task> getInPrTasks() {
+        Type type = new TypeToken<List<Task>>() {
         }.getType();
-        String json = pref.getString(prefName, null);
-        Task[] tasks = gson.fromJson(json, type);
-        return tasks;
+        String inProgress = pref.getString("inProgress", null);
+        List<Task> inPr = gson.fromJson(inProgress, type);
+        return inPr;
+    }
+
+    public List<Task> getDoneTasks() {
+        Type type = new TypeToken<List<Task>>() {
+        }.getType();
+        String done = pref.getString("done", null);
+        List<Task> d = gson.fromJson(done, type);
+        return d;
     }
 
     public void deleteTasks() {

@@ -6,4 +6,6 @@
     <string name="INPROGRESS_PREF">inProgress</string>
     <string name="DONE_PREF">done</string>
     <string name="SAVE_STATE_KEY">key</string>
+    <string name="ALL">all</string>
+
 </resources>

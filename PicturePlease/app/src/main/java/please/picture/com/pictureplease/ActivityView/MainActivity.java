@@ -1,6 +1,5 @@
 package please.picture.com.pictureplease.ActivityView;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,13 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import please.picture.com.pictureplease.CacheTasks.TaskCache;
-import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
-import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -39,51 +35,25 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private TextView title;
     private ActionBarDrawerToggle mDrawerToggle;
-    private TaskListRequest listRequest;
     private SessionManager manager;
     private HashMap<String, String> user;
-    private Task[] tasksInPr, tasksDone;
     private TaskCache taskCacheInPr, taskCacheDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        toolbar = (Toolbar) findViewById(R.id.include);
+        initToolbar();
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
-
-        title = (TextView) findViewById(R.id.toolbar_title);
         setupDrawerContent(nvDrawer);
         setSupportActionBar(toolbar);
+        initSession();
+        setUpDrawerToogle();
+        createSession();
+        createTransaction(new TaskFragment());
+    }
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, null,
-                R.string.OPEN, R.string.CLOSE) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawer.addDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
-
-
-        sessionManager = new SessionManager(MainActivity.this);
+    private void createSession() {
         if (!sessionManager.isLoggedIn()) {
             sessionManager.checkLogin();
         } else {
@@ -97,23 +67,21 @@ public class MainActivity extends AppCompatActivity {
                 //photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
-            String loginString = user.get(SessionManager.KEY_LOGIN);
-            String emailString = user.get(SessionManager.KEY_EMAIL);
-
-            login = (TextView) navHeader.findViewById(R.id.Login);
-            email = (TextView) navHeader.findViewById(R.id.Email);
-            login.setTextSize(20);
-            login.setText(loginString);
-            email.setText(emailString);
+            initTextViewHeaderContent(user.get(SessionManager.KEY_LOGIN), user.get(SessionManager.KEY_EMAIL));
         }
-        manager = new SessionManager(this);
-        user = manager.getUserDetails();
-        listRequest = new TaskListRequest(this);
-        taskCacheInPr = new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
-        taskCacheDone = new TaskCache(this, getResources().getString(R.string.DONE_PREF));
-        Fragment fragment = new TaskFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.include);
+        title = (TextView) findViewById(R.id.toolbar_title);
+    }
+
+    private void initTextViewHeaderContent(String loginString, String emailString) {
+        login = (TextView) navHeader.findViewById(R.id.Login);
+        email = (TextView) navHeader.findViewById(R.id.Email);
+        login.setTextSize(20);
+        login.setText(loginString);
+        email.setText(emailString);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -131,9 +99,42 @@ public class MainActivity extends AppCompatActivity {
         title.setText(t);
     }
 
+    private void initSession() {
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        sessionManager = new SessionManager(MainActivity.this);
+        manager = new SessionManager(this);
+        user = manager.getUserDetails();
+        taskCacheInPr = new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+        taskCacheDone = new TaskCache(this, getResources().getString(R.string.DONE_PREF));
+    }
+
+    public void createTransaction(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    public void setUpDrawerToogle() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, null,
+                R.string.OPEN, R.string.CLOSE) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawer.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+    }
+
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-        android.support.v4.app.Fragment fragment = null;
+        Fragment fragment;
 
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment: {
@@ -147,27 +148,21 @@ public class MainActivity extends AppCompatActivity {
             case R.id.exit: {
                 sessionManager.logoutUser();
                 TaskCache taskCache =
-                        new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+                        new TaskCache(this, getResources().getString(R.string.ALL));
                 taskCache.deleteTasks();
-                taskCache =
-                        new TaskCache(this, getResources().getString(R.string.DONE_PREF));
-                taskCache.deleteTasks();
+
             }
             default: {
                 fragment = new RatingFragment();
             }
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
+        createTransaction(fragment);
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
     }
 
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
