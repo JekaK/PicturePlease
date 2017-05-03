@@ -39,6 +39,7 @@ public class DoneFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
         listRequest = new TaskListRequest(getActivity());
@@ -49,7 +50,7 @@ public class DoneFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.done_fragment, null);
+       /* root = inflater.inflate(R.layout.done_fragment, null);
         gridView = (GridView) root.findViewById(R.id.doneGrid);
         adjustGridView();
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainerDone);
@@ -58,10 +59,7 @@ public class DoneFragment extends Fragment {
             public void onRefresh() {
                 loadTasks();
             }
-        });
-        if (taskCache.getTasks() == null) {
-            loadTasks();
-        }
+        });*/
         return root;
     }
 

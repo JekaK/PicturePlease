@@ -1,5 +1,6 @@
 package please.picture.com.pictureplease.ActivityView;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -16,11 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import please.picture.com.pictureplease.CacheTasks.TaskCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
+import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -36,9 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private TextView title;
     private ActionBarDrawerToggle mDrawerToggle;
+    private TaskListRequest listRequest;
+    private SessionManager manager;
+    private HashMap<String, String> user;
+    private Task[] tasksInPr, tasksDone;
+    private TaskCache taskCacheInPr, taskCacheDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -97,9 +106,12 @@ public class MainActivity extends AppCompatActivity {
             login.setText(loginString);
             email.setText(emailString);
         }
-        Fragment fragment = new TaskFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        manager = new SessionManager(this);
+        user = manager.getUserDetails();
+        listRequest = new TaskListRequest(this);
+        taskCacheInPr = new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+        taskCacheDone = new TaskCache(this, getResources().getString(R.string.DONE_PREF));
+        loadTasksInPr();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -122,21 +134,30 @@ public class MainActivity extends AppCompatActivity {
         android.support.v4.app.Fragment fragment = null;
 
         switch (menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
+            case R.id.nav_first_fragment: {
                 fragment = new TaskFragment();
                 break;
-            case R.id.nav_second_fragment:
+            }
+            case R.id.nav_second_fragment: {
                 fragment = new RatingFragment();
-
                 break;
+            }
             case R.id.exit: {
                 sessionManager.logoutUser();
+                TaskCache taskCache =
+                        new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+                taskCache.deleteTasks();
+                taskCache =
+                        new TaskCache(this, getResources().getString(R.string.DONE_PREF));
+                taskCache.deleteTasks();
             }
-            default:
-                fragment = new TaskFragment();
+            default: {
+                fragment = new RatingFragment();
+            }
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         menuItem.setChecked(true);
@@ -144,15 +165,44 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        TaskCache taskCache =
-                new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
-        taskCache.deleteTasks();
-        taskCache =
-                new TaskCache(this, getResources().getString(R.string.DONE_PREF));
-        taskCache.deleteTasks();
+
+    public void loadTasksInPr() {
+        if (taskCacheInPr.getTasks() == null) {
+            final ProgressDialog progressDialog;
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Loading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
+                    new TaskListRequest.callback() {
+                        @Override
+                        public void afterLoad(Task[] list) {
+                            tasksInPr = list;
+                            taskCacheInPr.deleteTasks();
+                            taskCacheInPr.saveTasks(tasksInPr);
+                            progressDialog.dismiss();
+                            Fragment fragment = new TaskFragment();
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                        }
+
+                        @Override
+                        public void afterloadException() {
+                            tasksInPr = new Task[0];
+                            taskCacheInPr.deleteTasks();
+                            taskCacheInPr.saveTasks(tasksInPr);
+                            progressDialog.dismiss();
+                            Fragment fragment = new TaskFragment();
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                        }
+                    }, true);
+        } else {
+            Fragment fragment = new TaskFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
     }
 
     @Override

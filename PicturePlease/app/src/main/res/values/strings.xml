@@ -5,4 +5,5 @@
     <string name="CLOSE">Close</string>
     <string name="INPROGRESS_PREF">inProgress</string>
     <string name="DONE_PREF">done</string>
+    <string name="SAVE_STATE_KEY">key</string>
 </resources>

@@ -1,21 +1,14 @@
 package please.picture.com.pictureplease.FragmentView;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -24,7 +17,6 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
-import please.picture.com.pictureplease.Adapter.TaskAdapter;
 import please.picture.com.pictureplease.CacheTasks.TaskCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentAdapter.FragmentAdapter;
@@ -42,10 +34,16 @@ public class TaskFragment extends Fragment {
     private TabLayout tabLayout;
 
 
+    public static TaskFragment newInstance(SavedState savedState) {
+        TaskFragment frag = new TaskFragment();
+        frag.setInitialSavedState(savedState);
+        return frag;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -61,7 +59,6 @@ public class TaskFragment extends Fragment {
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
         tabLayout.setSelectedTabIndicatorHeight(5);
-
         tabLayout.setupWithViewPager(pager);
         initDivider();
         return root;
@@ -76,5 +73,15 @@ public class TaskFragment extends Fragment {
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
