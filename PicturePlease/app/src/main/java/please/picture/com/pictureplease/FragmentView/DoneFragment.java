@@ -50,16 +50,23 @@ public class DoneFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       /* root = inflater.inflate(R.layout.done_fragment, null);
+        root = inflater.inflate(R.layout.done_fragment, null);
         gridView = (GridView) root.findViewById(R.id.doneGrid);
-        adjustGridView();
+        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainerDone);
+        if (tasks == null) {
+            loadTasks();
+        } else {
+            adapter = new TaskAdapter(getActivity(), tasks);
+            gridView.setAdapter(adapter);
+            adjustGridView();
+        }
         swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainerDone);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 loadTasks();
             }
-        });*/
+        });
         return root;
     }
 
@@ -87,6 +94,7 @@ public class DoneFragment extends Fragment {
         taskCache.saveTasks(tasks);
         adapter = new TaskAdapter(getActivity(), tasks);
         gridView.setAdapter(adapter);
+        adjustGridView();
     }
 
     private void adjustGridView() {

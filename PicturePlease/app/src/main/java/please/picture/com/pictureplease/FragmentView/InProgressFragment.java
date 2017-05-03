@@ -54,6 +54,8 @@ public class InProgressFragment extends Fragment {
         tasks = taskCache.getTasks();
         root = inflater.inflate(R.layout.in_progress_fragment, null);
         gridView = (GridView) root.findViewById(R.id.gvMain);
+        swipeContainer = (SwipeRefreshLayout) root.findViewById(R.id.swipeContainer);
+
         if (tasks == null) {
             loadTasks();
         } else {

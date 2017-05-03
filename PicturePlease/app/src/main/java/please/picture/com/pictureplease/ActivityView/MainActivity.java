@@ -111,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
         listRequest = new TaskListRequest(this);
         taskCacheInPr = new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
         taskCacheDone = new TaskCache(this, getResources().getString(R.string.DONE_PREF));
-        loadTasksInPr();
+        Fragment fragment = new TaskFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -165,46 +167,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
-
-    public void loadTasksInPr() {
-        if (taskCacheInPr.getTasks() == null) {
-            final ProgressDialog progressDialog;
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Loading...");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
-                    new TaskListRequest.callback() {
-                        @Override
-                        public void afterLoad(Task[] list) {
-                            tasksInPr = list;
-                            taskCacheInPr.deleteTasks();
-                            taskCacheInPr.saveTasks(tasksInPr);
-                            progressDialog.dismiss();
-                            Fragment fragment = new TaskFragment();
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                        }
-
-                        @Override
-                        public void afterloadException() {
-                            tasksInPr = new Task[0];
-                            taskCacheInPr.deleteTasks();
-                            taskCacheInPr.saveTasks(tasksInPr);
-                            progressDialog.dismiss();
-                            Fragment fragment = new TaskFragment();
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                        }
-                    }, true);
-        } else {
-            Fragment fragment = new TaskFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }
-    }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
