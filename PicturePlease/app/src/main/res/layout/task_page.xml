@@ -1,217 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:background="@drawable/gradient"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="0dp">
-    </include>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/back"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/imageView2"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="In progress"
-        android:textColor="#fff"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView2"
-        android:layout_marginLeft="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        android:layout_marginBottom="80dp"
-        android:layout_marginStart="32dp" />
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
-        app:cardElevation="3dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/test" />
-    </android.support.v7.widget.CardView>
-
-    <ImageView
-        android:id="@+id/place"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view"
-        app:srcCompat="@drawable/place" />
-
-    <ImageView
-        android:id="@+id/calendar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place"
-        app:srcCompat="@drawable/calendar" />
-
-    <ImageView
-        android:id="@+id/people"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar"
-        app:srcCompat="@drawable/people" />
-
-    <TextView
-        android:id="@+id/place_text"
-        android:layout_width="0dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="38dp"
-        android:ellipsize="end"
-        android:maxEms="50"
-        android:paddingRight="20dp"
-        android:singleLine="true"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
-
-Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
-        app:layout_constraintLeft_toRightOf="@+id/place"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view" />
-
-    <TextView
-        android:id="@+id/date_text"
-        android:layout_width="0dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="39dp"
-        android:ellipsize="end"
-        android:maxEms="50"
-        android:paddingRight="20dp"
-        android:singleLine="true"
-
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
-
-Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toRightOf="@+id/calendar"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place_text" />
-
-    <TextView
-        android:id="@+id/people_text"
-        android:layout_width="0dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="38dp"
-        android:ellipsize="end"
-        android:maxEms="50"
-        android:paddingRight="20dp"
-        android:singleLine="true"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
-
-Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toRightOf="@+id/people"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_text" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:paddingRight="20dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
-
-Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/people_text" />
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/submit"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/button_style"
-        app:cardBackgroundColor="#fa5c65"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="3dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/description">
-
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <include xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/gradient"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="0dp" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/back"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="64dp"
+                app:cardElevation="3dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/toolbar">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/picture" />
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:id="@+id/place"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_view"
+                app:srcCompat="@drawable/place" />
+
+            <ImageView
+                android:id="@+id/calendar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/place"
+                app:srcCompat="@drawable/calendar" />
+
+            <ImageView
+                android:id="@+id/people"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/calendar"
+                app:srcCompat="@drawable/people" />
+
             <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:text="Submit photo"
-                android:textColor="#fff"
-                android:textSize="15dp" />
+                android:id="@+id/place_text"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="38dp"
+                android:ellipsize="end"
+                android:maxEms="50"
+                android:paddingRight="20dp"
+                android:singleLine="true"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
 
-        </RelativeLayout>
+Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                app:layout_constraintLeft_toRightOf="@+id/place"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_view"
+                app:layout_constraintHorizontal_bias="0.0" />
 
-    </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="39dp"
+                android:ellipsize="end"
+                android:maxEms="50"
+                android:paddingRight="20dp"
+                android:singleLine="true"
 
-</android.support.constraint.ConstraintLayout>
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
+
+Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toRightOf="@+id/calendar"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/place_text" />
+
+            <TextView
+                android:id="@+id/people_text"
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="38dp"
+                android:ellipsize="end"
+                android:maxEms="50"
+                android:paddingRight="20dp"
+                android:singleLine="true"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
+
+Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toRightOf="@+id/people"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date_text" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:paddingRight="20dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
+
+Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/people_text" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_style"
+                app:cardBackgroundColor="#fa5c65"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="Submit photo"
+                        android:textColor="#fff"
+                        android:textSize="15dp" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

@@ -52,7 +52,7 @@ public class TaskListRequest {
 
             @Override
             public void onFailure(Call<TasksRetrofitAsynk.TasksStruct> call, Throwable t) {
-
+                callback.afterloadException();
             }
         });
     }

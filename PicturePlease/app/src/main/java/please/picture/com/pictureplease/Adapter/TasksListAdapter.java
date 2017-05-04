@@ -1,6 +1,7 @@
 package please.picture.com.pictureplease.Adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import please.picture.com.pictureplease.ActivityView.TaskActivity;
 import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.R;
@@ -32,14 +34,14 @@ import please.picture.com.pictureplease.R;
  * Created by jeka on 30.04.17.
  */
 
-public class TaskAdapter extends ArrayAdapter {
+public class TasksListAdapter extends ArrayAdapter {
     private final Activity context;
     private List<Task> tasks;
     private ImageLoader loader;
     private DisplayImageOptions options;
     private ProgressBar spinner;
 
-    public TaskAdapter(Activity context, List<Task> tasks) {
+    public TasksListAdapter(Activity context, List<Task> tasks) {
         super(context, R.layout.task_card, tasks);
         this.context = context;
         this.tasks = tasks;
@@ -72,7 +74,7 @@ public class TaskAdapter extends ArrayAdapter {
         View rootView = inflater.inflate(R.layout.task_card, null, true);
 
         TextView name = (TextView) rootView.findViewById(R.id.place_name);
-        TextView street = (TextView) rootView.findViewById(R.id.place_street);
+        final TextView street = (TextView) rootView.findViewById(R.id.place_street);
         name.setText(tasks.get(position).getName());
         street.setText(tasks.get(position).getStreet());
         ImageView photo = (ImageView) rootView.findViewById(R.id.place_image);
@@ -91,6 +93,15 @@ public class TaskAdapter extends ArrayAdapter {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 spinner.setVisibility(View.GONE);
+            }
+        });
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, TaskActivity.class);
+                intent.putExtra("name", tasks.get(position).getName());
+                intent.putExtra("street", tasks.get(position).getStreet());
+                context.startActivity(intent);
             }
         });
         return rootView;

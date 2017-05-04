@@ -16,7 +16,7 @@ import please.picture.com.pictureplease.Entity.Task;
  * Created by jeka on 02.05.17.
  */
 
-public class TaskCache {
+public class TasksCache {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -24,7 +24,7 @@ public class TaskCache {
     private Gson gson;
     private String prefName;
 
-    public TaskCache(Context context, String prefName) {
+    public TasksCache(Context context, String prefName) {
         this.context = context;
         this.prefName = prefName;
         pref = this.context.getSharedPreferences(prefName, PRIVATE_MODE);

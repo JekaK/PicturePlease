@@ -2,7 +2,6 @@
 
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="56dp"
@@ -10,15 +9,4 @@
     android:fitsSystemWindows="true"
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/Toolbar_Theme">
-
-    <TextView
-        android:id="@+id/toolbar_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="LOGO"
-        android:gravity="center_vertical"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="italic"
-        tools:ignore="HardcodedText" />
 </android.support.v7.widget.Toolbar>

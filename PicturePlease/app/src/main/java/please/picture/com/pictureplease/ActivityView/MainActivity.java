@@ -1,6 +1,7 @@
 package please.picture.com.pictureplease.ActivityView;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,12 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
 
-import please.picture.com.pictureplease.CacheTasks.TaskCache;
+import please.picture.com.pictureplease.CacheTasks.TasksCache;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
 import please.picture.com.pictureplease.R;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private SessionManager manager;
     private HashMap<String, String> user;
-    private TaskCache taskCacheInPr, taskCacheDone;
+    private TasksCache tasksCacheInPr, tasksCacheDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.include);
-        title = (TextView) findViewById(R.id.toolbar_title);
+        title = new TextView(this);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        title.setLayoutParams(layoutParams);
+        title.setTextColor(Color.WHITE);
+        title.setTextSize(20);
+        toolbar.addView(title);
     }
 
     private void initTextViewHeaderContent(String loginString, String emailString) {
@@ -104,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         sessionManager = new SessionManager(MainActivity.this);
         manager = new SessionManager(this);
         user = manager.getUserDetails();
-        taskCacheInPr = new TaskCache(this, getResources().getString(R.string.INPROGRESS_PREF));
-        taskCacheDone = new TaskCache(this, getResources().getString(R.string.DONE_PREF));
+        tasksCacheInPr = new TasksCache(this, getResources().getString(R.string.INPROGRESS_PREF));
+        tasksCacheDone = new TasksCache(this, getResources().getString(R.string.DONE_PREF));
     }
 
     public void createTransaction(Fragment fragment) {
@@ -147,9 +154,9 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.exit: {
                 sessionManager.logoutUser();
-                TaskCache taskCache =
-                        new TaskCache(this, getResources().getString(R.string.ALL));
-                taskCache.deleteTasks();
+                TasksCache tasksCache =
+                        new TasksCache(this, getResources().getString(R.string.ALL));
+                tasksCache.deleteTasks();
 
             }
             default: {

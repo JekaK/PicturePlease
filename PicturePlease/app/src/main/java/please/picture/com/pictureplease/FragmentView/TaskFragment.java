@@ -16,12 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
-import please.picture.com.pictureplease.CacheTasks.TaskCache;
+import please.picture.com.pictureplease.CacheTasks.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.FragmentAdapter.FragmentAdapter;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
@@ -33,6 +34,7 @@ import please.picture.com.pictureplease.Session.SessionManager;
  */
 
 public class TaskFragment extends Fragment {
+
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
     private TabLayout tabLayout;
@@ -40,7 +42,7 @@ public class TaskFragment extends Fragment {
     private SessionManager manager;
     private HashMap<String, String> user;
     private List<Task> tasksInPr, tasksDone;
-    private TaskCache taskCache;
+    private TasksCache tasksCache;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class TaskFragment extends Fragment {
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
         listRequest = new TaskListRequest(getActivity());
-        taskCache = new TaskCache(getActivity(), getResources().getString(R.string.ALL));
+        tasksCache = new TasksCache(getActivity(), getResources().getString(R.string.ALL));
 
     }
 
@@ -60,7 +62,7 @@ public class TaskFragment extends Fragment {
         tabLayout = (TabLayout) root.findViewById(R.id.tabs);
         pagerAdapter = new FragmentAdapter(getChildFragmentManager());
         ((MainActivity) getActivity()).setTitle("Tasks");
-        if (taskCache.getInPrTasks() == null || taskCache.getDoneTasks() == null)
+        if (tasksCache.getInPrTasks() == null || tasksCache.getDoneTasks() == null)
             loadTasks();
         else {
             pager.setAdapter(pagerAdapter);
@@ -84,13 +86,12 @@ public class TaskFragment extends Fragment {
         progressDialog.show();
         listRequest.loadTaskInfo(Integer.valueOf(user.get(SessionManager.KEY_ID)),
                 new TaskListRequest.callback() {
-
                     @Override
                     public void afterLoad(List<Task> inPr, List<Task> done) {
                         tasksInPr = inPr;
                         tasksDone = done;
-                        taskCache.deleteTasks();
-                        taskCache.saveTasks(inPr, done);
+                        tasksCache.deleteTasks();
+                        tasksCache.saveTasks(inPr, done);
                         pager.setAdapter(pagerAdapter);
                         tabLayout.setupWithViewPager(pager);
                         progressDialog.dismiss();
@@ -98,7 +99,9 @@ public class TaskFragment extends Fragment {
 
                     @Override
                     public void afterloadException() {
-
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(), "Something wrong. Check Your Internet connection"
+                                , Toast.LENGTH_LONG).show();
                     }
                 });
     }
