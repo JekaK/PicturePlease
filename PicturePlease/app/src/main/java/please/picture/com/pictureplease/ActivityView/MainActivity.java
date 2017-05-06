@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import please.picture.com.pictureplease.CacheTasks.TasksCache;
+import please.picture.com.pictureplease.CustomView.RoundedImageView;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
 import please.picture.com.pictureplease.R;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-    private ImageView photoUser;
+    private RoundedImageView photoUser;
     private View navHeader;
     private TextView email, login;
     private SessionManager sessionManager;
@@ -59,12 +60,13 @@ public class MainActivity extends AppCompatActivity {
             sessionManager.checkLogin();
         } else {
             navHeader = nvDrawer.getHeaderView(0);
-            photoUser = (ImageView) navHeader.findViewById(R.id.photoUser);
+            photoUser = (RoundedImageView) navHeader.findViewById(R.id.photoUser);
             HashMap<String, String> user = sessionManager.getUserDetails();
             if (user.get("photo").equals("desiredFilename.jpg")) {
                 Bitmap b = new BitmapOperations(getApplicationContext())
                         .getThumbnail(user.get(SessionManager.KEY_PHOTO));
                 photoUser.setImageBitmap(b);
+                navHeader.setBackgroundResource(R.drawable.gradient);
                 //photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 

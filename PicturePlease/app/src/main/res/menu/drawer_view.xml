@@ -4,15 +4,15 @@
         <item
             android:id="@+id/nav_first_fragment"
             android:icon="@drawable/list"
-            android:title="ViewTask" />
+            android:title="Tasks" />
         <item
             android:id="@+id/nav_second_fragment"
             android:icon="@drawable/customer"
-            android:title="ViewRating" />
+            android:title="Rating" />
         <item
             android:id="@+id/nav_third_fragment"
             android:icon="@drawable/earth"
-            android:title="GeotagChallenge" />
+            android:title="Geotag challenge" />
     </group>
 
 
