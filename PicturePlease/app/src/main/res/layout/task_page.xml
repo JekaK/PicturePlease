@@ -21,13 +21,13 @@
                 layout="@layout/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                android:layout_marginTop="0dp"
                 android:background="@drawable/gradient"
                 android:minHeight="?attr/actionBarSize"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="0dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -110,10 +110,10 @@
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
 
 Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/place"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_view"
-                app:layout_constraintHorizontal_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/card_view" />
 
             <TextView
                 android:id="@+id/date_text"
@@ -170,9 +170,7 @@ Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec c
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:paddingRight="20dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla consequat tellus consequat pretium sollicitudin. Proin sed dapibus erat. Mauris eu semper lorem. Donec sit amet dui at purus tincidunt imperdiet a a tellus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tincidunt quam et pharetra iaculis. Nullam hendrerit in elit at tincidunt. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam pulvinar sodales lorem iaculis finibus. Nam a hendrerit ligula. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum eros nec condimentum pretium. Donec lorem velit, tincidunt non volutpat tempor, mattis ut leo. Donec quis tristique est.
-
-Quisque lacinia nibh a eros viverra, at ullamcorper arcu condimentum. Duis nec consectetur orci. Morbi eu pharetra est. Quisque lectus libero, varius non arcu non, iaculis vestibulum massa. Mauris tincidunt consectetur ligula, ac pellentesque nisl fringilla nec. Donec dapibus diam in iaculis molestie. Etiam varius neque sed sagittis luctus. Vestibulum aliquam risus sit amet mi gravida, pulvinar sagittis ligula auctor. Vivamus maximus nec odio in auctor. Duis mauris ex, tristique sed egestas a, rhoncus non risus. Vestibulum lacinia elit a sollicitudin semper. Quisque facilisis tristique lacus non aliquet. Maecenas ipsum justo, aliquam eu auctor vel, convallis eu metus. Sed imperdiet arcu sit amet tincidunt aliquam."
+                android:text="@string/Desc"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

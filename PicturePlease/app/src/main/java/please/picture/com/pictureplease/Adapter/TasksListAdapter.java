@@ -100,6 +100,7 @@ public class TasksListAdapter extends ArrayAdapter {
                 intent.putExtra("street", tasks.get(position).getStreet());
                 intent.putExtra("date", tasks.get(position).getDate());
                 intent.putExtra("people", tasks.get(position).getPeople());
+                intent.putExtra("description", tasks.get(position).getDescription());
                 context.startActivity(intent);
             }
         });

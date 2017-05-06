@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import please.picture.com.pictureplease.AlertDialogs.DescriptionDialog;
 import please.picture.com.pictureplease.AlertDialogs.PeopleAddDialog;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Util.Parser;
@@ -22,10 +23,12 @@ import please.picture.com.pictureplease.Util.Parser;
  * Created by jeka on 04.05.17.
  */
 
-public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.DateDialogListener {
+public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.PeopleDialogListener, DescriptionDialog.DescriptionDialogListener {
     private Toolbar toolbar;
-    private TextView title, place, date, people;
-    private final String PEOPLE = "People, that be with You";
+    private TextView title, place, date, people, description;
+    private String PEOPLE;
+    private String DESC;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +55,17 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.D
     }
 
     private void initTexView() {
+        PEOPLE = getResources().getString(R.string.People);
+        DESC = getResources().getString(R.string.Desc);
         title.setText(getIntent().getStringExtra("name"));
         people = (TextView) findViewById(R.id.people_text);
         date = (TextView) findViewById(R.id.date_text);
         place = (TextView) findViewById(R.id.place_text);
+        description = (TextView) findViewById(R.id.description);
         Intent intent = getIntent();
         String dateS = intent.getStringExtra("date");
         String peopleS = intent.getStringExtra("people");
+        String descriptionS = intent.getStringExtra("description");
         place.setText(intent.getStringExtra("street"));
         if (dateS != null)
             date.setText(dateS);
@@ -70,9 +77,19 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.D
             @Override
             public void onClick(View view) {
                 PeopleAddDialog addDialog = new PeopleAddDialog();
-                addDialog.show(getFragmentManager(), "TEST");
+                addDialog.show(getFragmentManager(), "ADD_PEOPLE");
             }
         });
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DescriptionDialog descriptionDialog = new DescriptionDialog();
+                descriptionDialog.show(getFragmentManager(), "DESCRIPTION");
+            }
+        });
+        if (descriptionS != null) {
+            description.setText(descriptionS);
+        } else description.setText(DESC);
     }
 
     private int dpToPxConverter(int dp) {
@@ -93,7 +110,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.D
             }
             bf.delete(bf.length() - 2, bf.length() - 1);
             people.setText(bf);
-        }else{
+        } else {
             people.setText(PEOPLE);
         }
 
@@ -107,5 +124,24 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.D
             res = new ArrayList<>();
         }
         return res;
+    }
+
+    @Override
+    public void onFinishDescription(String text) {
+        if (!text.equals("")) {
+            description.setText(text);
+        } else {
+            description.setText(DESC);
+        }
+    }
+
+    @Override
+    public String onDescriptionNotNull(String text) {
+        if (!description.getText().equals(DESC)) {
+            text = description.getText().toString();
+        } else {
+            text = new String("");
+        }
+        return text;
     }
 }

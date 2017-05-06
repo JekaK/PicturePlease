@@ -32,8 +32,11 @@ public class Task {
     @SerializedName("people")
     @Expose
     private String people;
+    @SerializedName("description")
+    @Expose
+    private String description;
 
-    public Task(String name, String latitude, String longitude, String street, String photo, String date, String people) {
+    public Task(String name, String latitude, String longitude, String street, String photo, String date, String people, String description) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -41,8 +44,8 @@ public class Task {
         this.photo = photo;
         this.date = date;
         this.people = people;
+        this.description = description;
     }
-
 
     public String getName() {
         return name;
@@ -98,6 +101,14 @@ public class Task {
 
     public void setPeople(String people) {
         this.people = people;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

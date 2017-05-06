@@ -7,5 +7,7 @@
     <string name="DONE_PREF">done</string>
     <string name="SAVE_STATE_KEY">key</string>
     <string name="ALL">all</string>
+    <string name="Desc">Your description about travel</string>
+    <string name="People">People, that be with You</string>
 
 </resources>

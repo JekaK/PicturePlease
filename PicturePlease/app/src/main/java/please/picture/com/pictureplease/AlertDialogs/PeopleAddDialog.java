@@ -32,7 +32,7 @@ public class PeopleAddDialog extends DialogFragment {
     private ArrayList<String> list;
     private TaskActivity activity;
 
-    public interface DateDialogListener {
+    public interface PeopleDialogListener {
         void onFinishDialog(ArrayList<String> res);
 
         ArrayList<String> onPeopleViewNotNull(ArrayList<String> res);
@@ -58,6 +58,7 @@ public class PeopleAddDialog extends DialogFragment {
                 if (!text.getText().toString().equals("")) {
                     list.add(text.getText().toString());
                     adapter.notifyItemInserted(list.size() - 1);
+                    adapter.notifyItemRangeChanged(list.size() - 1, list.size());
                 }
             }
         });
