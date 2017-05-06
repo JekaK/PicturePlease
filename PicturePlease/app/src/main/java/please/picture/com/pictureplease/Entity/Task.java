@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by jeka on 02.05.17.
  */
 
-public class Task implements Parcelable {
+public class Task {
     @SerializedName("Name")
     @Expose
     private String name;
@@ -26,34 +26,23 @@ public class Task implements Parcelable {
     @SerializedName("Photo")
     @Expose
     private String photo;
+    @SerializedName("date")
+    @Expose
+    private String date;
+    @SerializedName("people")
+    @Expose
+    private String people;
 
-    public Task(String name, String latitude, String longitude, String street, String photo) {
+    public Task(String name, String latitude, String longitude, String street, String photo, String date, String people) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.street = street;
         this.photo = photo;
+        this.date = date;
+        this.people = people;
     }
 
-    protected Task(Parcel in) {
-        name = in.readString();
-        latitude = in.readString();
-        longitude = in.readString();
-        street = in.readString();
-        photo = in.readString();
-    }
-
-    public static final Creator<Task> CREATOR = new Creator<Task>() {
-        @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
-        }
-
-        @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
-        }
-    };
 
     public String getName() {
         return name;
@@ -95,18 +84,20 @@ public class Task implements Parcelable {
         this.photo = photo;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getDate() {
+        return date;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(latitude);
-        parcel.writeString(longitude);
-        parcel.writeString(street);
-        parcel.writeString(photo);
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getPeople() {
+        return people;
+    }
+
+    public void setPeople(String people) {
+        this.people = people;
     }
 }
 

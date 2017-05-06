@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private SessionManager manager;
     private HashMap<String, String> user;
-    private TasksCache tasksCacheInPr, tasksCacheDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
         sessionManager = new SessionManager(MainActivity.this);
         manager = new SessionManager(this);
         user = manager.getUserDetails();
-        tasksCacheInPr = new TasksCache(this, getResources().getString(R.string.INPROGRESS_PREF));
-        tasksCacheDone = new TasksCache(this, getResources().getString(R.string.DONE_PREF));
     }
 
     public void createTransaction(Fragment fragment) {

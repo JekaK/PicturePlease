@@ -1,4 +1,4 @@
-package please.picture.com.pictureplease.FragmentAdapter;
+package please.picture.com.pictureplease.Adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

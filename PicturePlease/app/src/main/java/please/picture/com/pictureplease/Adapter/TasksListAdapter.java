@@ -19,10 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.TaskActivity;
@@ -101,9 +98,12 @@ public class TasksListAdapter extends ArrayAdapter {
                 Intent intent = new Intent(context, TaskActivity.class);
                 intent.putExtra("name", tasks.get(position).getName());
                 intent.putExtra("street", tasks.get(position).getStreet());
+                intent.putExtra("date", tasks.get(position).getDate());
+                intent.putExtra("people", tasks.get(position).getPeople());
                 context.startActivity(intent);
             }
         });
+
         return rootView;
     }
 

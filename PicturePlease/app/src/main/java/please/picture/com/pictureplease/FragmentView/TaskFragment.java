@@ -24,7 +24,7 @@ import java.util.List;
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.CacheTasks.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
-import please.picture.com.pictureplease.FragmentAdapter.FragmentAdapter;
+import please.picture.com.pictureplease.Adapter.FragmentAdapter;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Session.SessionManager;
