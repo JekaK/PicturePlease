@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
+import please.picture.com.pictureplease.Adapter.FragmentAdapter;
 import please.picture.com.pictureplease.CacheTasks.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
-import please.picture.com.pictureplease.Adapter.FragmentAdapter;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -50,7 +50,7 @@ public class TaskFragment extends Fragment {
         setHasOptionsMenu(true);
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
-        listRequest = new TaskListRequest(getActivity());
+        listRequest = new TaskListRequest();
         tasksCache = new TasksCache(getActivity(), getResources().getString(R.string.ALL));
 
     }
@@ -62,17 +62,14 @@ public class TaskFragment extends Fragment {
         tabLayout = (TabLayout) root.findViewById(R.id.tabs);
         pagerAdapter = new FragmentAdapter(getChildFragmentManager());
         ((MainActivity) getActivity()).setTitle("Tasks");
+
         if (tasksCache.getInPrTasks() == null || tasksCache.getDoneTasks() == null)
             loadTasks();
         else {
             pager.setAdapter(pagerAdapter);
             tabLayout.setupWithViewPager(pager);
         }
-
-        tabLayout.setBackgroundResource(R.drawable.gradient);
-        tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
-        tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
-        tabLayout.setSelectedTabIndicatorHeight(5);
+        customizeTab();
         initDivider();
         return root;
     }
@@ -94,11 +91,13 @@ public class TaskFragment extends Fragment {
                         tasksCache.saveTasks(inPr, done);
                         pager.setAdapter(pagerAdapter);
                         tabLayout.setupWithViewPager(pager);
+                        initDivider();
                         progressDialog.dismiss();
                     }
 
                     @Override
                     public void afterloadException() {
+                        initDivider();
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(), "Something wrong. Check Your Internet connection"
                                 , Toast.LENGTH_LONG).show();
@@ -115,6 +114,13 @@ public class TaskFragment extends Fragment {
             tabTextView.setText(tab.getText());
             tab.setCustomView(relativeLayout);
         }
+    }
+
+    private void customizeTab() {
+        tabLayout.setBackgroundResource(R.drawable.gradient);
+        tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
+        tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
+        tabLayout.setSelectedTabIndicatorHeight(5);
     }
 
     @Override

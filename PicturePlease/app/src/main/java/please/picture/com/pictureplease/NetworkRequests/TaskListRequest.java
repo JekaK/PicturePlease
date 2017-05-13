@@ -1,15 +1,8 @@
 package please.picture.com.pictureplease.NetworkRequests;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import please.picture.com.pictureplease.Asynk.TasksRetrofitAsynk;
-import please.picture.com.pictureplease.Callback.callback;
 import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.Entity.Task;
 import retrofit2.Call;
@@ -23,10 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class TaskListRequest {
-    private Context context;
 
-    public TaskListRequest(Context context) {
-        this.context = context;
+    public TaskListRequest() {
     }
 
     public interface callback {
@@ -47,6 +38,7 @@ public class TaskListRequest {
         call.enqueue(new Callback<TasksRetrofitAsynk.TasksStruct>() {
             @Override
             public void onResponse(Call<TasksRetrofitAsynk.TasksStruct> call, Response<TasksRetrofitAsynk.TasksStruct> response) {
+
                 callback.afterLoad(response.body().getInProgress(), response.body().getDone());
             }
 

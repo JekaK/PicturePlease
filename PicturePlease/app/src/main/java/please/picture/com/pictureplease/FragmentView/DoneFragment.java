@@ -38,7 +38,6 @@ public class DoneFragment extends Fragment {
         adapter = new TasksListAdapter(getActivity(), tasksCache.getDoneTasks());
         gridView.setAdapter(adapter);
         adjustGridView();
-
         return root;
     }
 

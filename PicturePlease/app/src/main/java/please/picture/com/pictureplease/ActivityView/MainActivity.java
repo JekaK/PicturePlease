@@ -1,5 +1,6 @@
 package please.picture.com.pictureplease.ActivityView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private SessionManager manager;
     private HashMap<String, String> user;
+    private Fragment transactFragment;
+    private Fragment[] fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
         initSession();
         setUpDrawerToogle();
         createSession();
-        createTransaction(new TaskFragment());
+        fragments = new Fragment[]{new TaskFragment(), new RatingFragment()};
+        transactFragment = fragments[0];
+        createTransaction(transactFragment);
     }
 
     private void createSession() {
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     public void createTransaction(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void setUpDrawerToogle() {
@@ -140,15 +146,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment;
+
 
         switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment: {
-                fragment = new TaskFragment();
+                if (!(transactFragment instanceof TaskFragment)) {
+                    transactFragment = fragments[0];
+                    createFragmentTransaction(transactFragment, menuItem);
+                } else {
+                    mDrawer.closeDrawers();
+                }
                 break;
             }
             case R.id.nav_second_fragment: {
-                fragment = new RatingFragment();
+                if (!(transactFragment instanceof RatingFragment)) {
+                    transactFragment = fragments[1];
+                    createFragmentTransaction(transactFragment, menuItem);
+                } else {
+                    mDrawer.closeDrawers();
+                }
                 break;
             }
             case R.id.exit: {
@@ -156,13 +172,26 @@ public class MainActivity extends AppCompatActivity {
                 TasksCache tasksCache =
                         new TasksCache(this, getResources().getString(R.string.ALL));
                 tasksCache.deleteTasks();
-
+                Intent i = new Intent(this, LogInActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finish();
+                break;
             }
             default: {
-                fragment = new RatingFragment();
+                if (!(transactFragment instanceof RatingFragment)) {
+                    transactFragment = fragments[1];
+                    createFragmentTransaction(transactFragment, menuItem);
+                } else {
+                    mDrawer.closeDrawers();
+                }
+                break;
             }
         }
+    }
 
+    private void createFragmentTransaction(Fragment fragment, MenuItem menuItem) {
         createTransaction(fragment);
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());

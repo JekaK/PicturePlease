@@ -78,12 +78,7 @@ public class SessionManager {
     public void logoutUser() {
         editor.clear();
         editor.commit();
-        Intent i = new Intent(context, LogInActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         bitmapOperations.deleteThumbnail("desiredFilename.jpg");
-        context.startActivity(i);
-        ((AppCompatActivity) context).finish();
     }
 
     public void checkLogin() {

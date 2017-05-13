@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import please.picture.com.pictureplease.Constants.Constants;
-import please.picture.com.pictureplease.NetworkRequests.CheckRequest;
 import please.picture.com.pictureplease.NetworkRequests.RegistrationRequest;
 import please.picture.com.pictureplease.R;
 

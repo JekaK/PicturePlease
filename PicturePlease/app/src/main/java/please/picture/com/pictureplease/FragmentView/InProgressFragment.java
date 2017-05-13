@@ -41,7 +41,7 @@ public class InProgressFragment extends Fragment {
         setRetainInstance(true);
         manager = new SessionManager(getActivity());
         user = manager.getUserDetails();
-        listRequest = new TaskListRequest(getActivity());
+        listRequest = new TaskListRequest();
         tasksCache = new TasksCache(getActivity(), getResources().getString(R.string.ALL));
 
     }

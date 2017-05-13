@@ -22,11 +22,9 @@ public class TasksCache {
     private Context context;
     private int PRIVATE_MODE = 0;
     private Gson gson;
-    private String prefName;
 
     public TasksCache(Context context, String prefName) {
         this.context = context;
-        this.prefName = prefName;
         pref = this.context.getSharedPreferences(prefName, PRIVATE_MODE);
         editor = pref.edit();
         gson = new Gson();

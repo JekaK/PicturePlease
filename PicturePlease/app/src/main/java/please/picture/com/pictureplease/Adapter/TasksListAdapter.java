@@ -3,6 +3,7 @@ package please.picture.com.pictureplease.Adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.TaskActivity;
@@ -45,53 +47,38 @@ public class TasksListAdapter extends ArrayAdapter {
         loader = ImageLoader.getInstance();
         spinner = new ProgressBar(context);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-                .memoryCacheExtraOptions(480, 800) // width, height
-                .discCacheExtraOptions(480, 800, null) // width, height, compress format, quality
+                .memoryCacheExtraOptions(480, 800)
+                .discCacheExtraOptions(480, 800, null)
                 .threadPoolSize(5)
                 .threadPriority(Thread.MIN_PRIORITY + 2)
                 .denyCacheImageMultipleSizesInMemory()
-                .memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024 * 1024)) // 2 Mb
+                .memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024 * 1024))
                 .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
-                .imageDownloader(new BaseImageDownloader(context)) // connectTimeout (5 s), readTimeout (30 s)
+                .imageDownloader(new BaseImageDownloader(context))
                 .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
                 .build();
         options = new DisplayImageOptions.Builder()
                 .resetViewBeforeLoading()
-                .cacheInMemory()
-                .cacheOnDisc()
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
                 .build();
         loader.init(config);
     }
-
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = context.getLayoutInflater();
-        View rootView = inflater.inflate(R.layout.task_card, null, true);
+        final View rootView = inflater.inflate(R.layout.task_card, null, true);
 
         TextView name = (TextView) rootView.findViewById(R.id.place_name);
         final TextView street = (TextView) rootView.findViewById(R.id.place_street);
+
         name.setText(tasks.get(position).getName());
         street.setText(tasks.get(position).getStreet());
-        ImageView photo = (ImageView) rootView.findViewById(R.id.place_image);
+        final ImageView photo = (ImageView) rootView.findViewById(R.id.place_image);
         photo.setScaleType(ImageView.ScaleType.FIT_XY);
-        loader.displayImage(Constants.BASE_URL.concat(tasks.get(position).getPhoto()), photo, options, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                spinner.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                spinner.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                spinner.setVisibility(View.GONE);
-            }
-        });
+        loader.displayImage(Constants.BASE_URL.concat(tasks.get(position).getPhoto()), photo, options);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +88,7 @@ public class TasksListAdapter extends ArrayAdapter {
                 intent.putExtra("date", tasks.get(position).getDate());
                 intent.putExtra("people", tasks.get(position).getPeople());
                 intent.putExtra("description", tasks.get(position).getDescription());
+                intent.putExtra("photo", Constants.BASE_URL.concat(tasks.get(position).getPhoto()));
                 context.startActivity(intent);
             }
         });
