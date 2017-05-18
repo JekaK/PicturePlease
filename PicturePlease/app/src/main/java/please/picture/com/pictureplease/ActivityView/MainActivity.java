@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -59,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         transactFragment = fragments[0];
         createTransaction(transactFragment);
     }
+
+
 
     private void createSession() {
         if (!sessionManager.isLoggedIn()) {
