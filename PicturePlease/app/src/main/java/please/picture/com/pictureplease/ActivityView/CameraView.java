@@ -1,8 +1,11 @@
 package please.picture.com.pictureplease.ActivityView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
@@ -20,7 +23,10 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import please.picture.com.pictureplease.GPSTracker;
 import please.picture.com.pictureplease.R;
 
 /**
@@ -37,25 +43,20 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // если хотим, чтобы приложение постоянно имело портретную ориентацию
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        // если хотим, чтобы приложение было полноэкранным
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // и без заголовка
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.camera_view);
 
-        // наше SurfaceView имеет имя SurfaceView01
         preview = (SurfaceView) findViewById(R.id.SurfaceView01);
 
         surfaceHolder = preview.getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-        // кнопка имеет имя Button01
         shotBtn = (ImageView) findViewById(R.id.camera_button);
         shotBtn.setOnClickListener(this);
     }
@@ -99,16 +100,12 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
 
         LayoutParams lp = preview.getLayoutParams();
 
-        // здесь корректируем размер отображаемого preview, чтобы не было искажений
-
         if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-            // портретный вид
             camera.setDisplayOrientation(90);
             lp.height = previewSurfaceHeight;
             lp.width = (int) (previewSurfaceHeight / aspect);
             ;
         } else {
-            // ландшафтный
             camera.setDisplayOrientation(0);
             lp.width = previewSurfaceWidth;
             lp.height = (int) (previewSurfaceWidth / aspect);
@@ -125,46 +122,51 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
     @Override
     public void onClick(View v) {
         if (v == shotBtn) {
-            // либо делаем снимок непосредственно здесь
-            // 	либо включаем обработчик автофокуса
-
-            //camera.takePicture(null, null, null, this);
             camera.autoFocus(this);
         }
     }
 
     @Override
     public void onPictureTaken(byte[] paramArrayOfByte, Camera paramCamera) {
-        // сохраняем полученные jpg в папке /sdcard/CameraExample/
-        // имя файла - System.currentTimeMillis()
-
         try {
             File saveDir = new File("/sdcard/DCIM/Camera/");
 
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
             }
-
-            FileOutputStream os = new FileOutputStream(String.format("/sdcard/DCIM/Camera/%d.jpg", System.currentTimeMillis()));
-            os.write(paramArrayOfByte);
-            os.close();
+            String res = getResources().getString(R.string.CAMERA_IMAGE) + String.valueOf(System.currentTimeMillis() + ".jpg");
+            Intent intent = new Intent();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            intent.putExtra("path",
+                    res);
+            intent.putExtra("date", currentDateandTime);
+            GPSTracker gps = new GPSTracker(this);
+            double latitude = -1, longitude = -1;
+            if (gps.canGetLocation()) {
+                latitude = gps.getLatitude();
+                longitude = gps.getLongitude();
+            } else {
+                gps.showSettingsAlert();
+            }
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            App.getInstance().setCapturedPhotoData(paramArrayOfByte);
+            setResult(RESULT_OK, intent);
+            finish();
         } catch (Exception e) {
         }
 
-        // после того, как снимок сделан, показ превью отключается. необходимо включить его
-        paramCamera.startPreview();
     }
 
     @Override
     public void onAutoFocus(boolean paramBoolean, Camera paramCamera) {
         if (paramBoolean) {
-            // если удалось сфокусироваться, делаем снимок
             paramCamera.takePicture(null, null, null, this);
         }
     }
 
     @Override
     public void onPreviewFrame(byte[] paramArrayOfByte, Camera paramCamera) {
-        // здесь можно обрабатывать изображение, показываемое в preview
     }
 }

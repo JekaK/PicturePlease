@@ -23,7 +23,6 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -36,14 +35,10 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,12 +46,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import please.picture.com.pictureplease.GPSTracker;
 import please.picture.com.pictureplease.R;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2View extends AppCompatActivity {
     private static final String TAG = "AndroidCameraApi";
-    private Button takePictureButton;
+    private ImageView takePictureButton;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -88,7 +84,7 @@ public class Camera2View extends AppCompatActivity {
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
-        takePictureButton = (Button) findViewById(R.id.btn_takepicture);
+        takePictureButton = (ImageView) findViewById(R.id.btn_takepicture);
         assert takePictureButton != null;
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +97,16 @@ public class Camera2View extends AppCompatActivity {
                         String currentDateandTime = sdf.format(new Date());
                         intent.putExtra("path",
                                 res);
+                        GPSTracker gps = new GPSTracker(Camera2View.this);
+                        double latitude = -1, longitude = -1;
+                        if (gps.canGetLocation()) {
+                            latitude = gps.getLatitude();
+                            longitude = gps.getLongitude();
+                        } else {
+                            gps.showSettingsAlert();
+                        }
+                        intent.putExtra("latitude", latitude);
+                        intent.putExtra("longitude", longitude);
                         intent.putExtra("date", currentDateandTime);
                         App.getInstance().setCapturedPhotoData(bytes);
                         setResult(RESULT_OK, intent);
@@ -217,7 +223,8 @@ public class Camera2View extends AppCompatActivity {
             // Orientation
            /* int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));*/
-            final File file = new File("/sdcard/DCIM/Camera/" + path + ".jpg");
+            final String imagePath = getResources().getString(R.string.CAMERA_IMAGE);
+            final File file = new File(imagePath + path + ".jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -241,8 +248,7 @@ public class Camera2View extends AppCompatActivity {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(Camera2View.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
-                    callback.sendResult("/sdcard/DCIM/Camera/" + path + ".jpg");
+                    callback.sendResult(imagePath + path + ".jpg");
                 }
             };
             cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
@@ -275,18 +281,15 @@ public class Camera2View extends AppCompatActivity {
             cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    //The camera is already closed
                     if (null == cameraDevice) {
                         return;
                     }
-                    // When the session is ready, we start displaying the preview.
                     cameraCaptureSessions = cameraCaptureSession;
                     updatePreview();
                 }
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(Camera2View.this, "Configuration change", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         } catch (CameraAccessException e) {
@@ -296,14 +299,12 @@ public class Camera2View extends AppCompatActivity {
 
     private void openCamera() {
         CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        Log.e(TAG, "is camera open");
         try {
             cameraId = manager.getCameraIdList()[0];
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
             imageDimension = map.getOutputSizes(SurfaceTexture.class)[0];
-            // Add permission for camera and let user grant the permission
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(Camera2View.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
                 return;
@@ -312,12 +313,10 @@ public class Camera2View extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
-        Log.e(TAG, "openCamera X");
     }
 
     protected void updatePreview() {
         if (null == cameraDevice) {
-            Log.e(TAG, "updatePreview error, return");
         }
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
         try {
@@ -342,7 +341,6 @@ public class Camera2View extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // close the app
                 Toast.makeText(Camera2View.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
                 finish();
             }

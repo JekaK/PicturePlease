@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -36,6 +37,7 @@ import please.picture.com.pictureplease.AlertDialogs.PeopleAddDialog;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Util.Parser;
+import please.picture.com.pictureplease.Util.Util;
 
 import static android.R.attr.bitmap;
 import static android.bluetooth.BluetoothClass.Service.CAPTURE;
@@ -70,8 +72,8 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         ViewGroup.MarginLayoutParams layoutParams =
                 new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.setMargins(dpToPxConverter(72), dpToPxConverter(15),
-                dpToPxConverter(8), dpToPxConverter(8));
+        layoutParams.setMargins(Util.dpToPxConverter(72, this), Util.dpToPxConverter(15, this),
+                Util.dpToPxConverter(8, this), Util.dpToPxConverter(8, this));
         title.setSingleLine();
         title.setEllipsize(TextUtils.TruncateAt.END);
         title.setTextSize(20);
@@ -98,12 +100,13 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         pictureTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Class res;
                 if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(new Intent(TaskActivity.this, CameraView.class));
+                    res = CameraView.class;
                 } else {
-                    startActivityForResult(new Intent(TaskActivity.this, Camera2View.class), 1);
+                    res = Camera2View.class;
                 }
-
+                startActivityForResult(new Intent(TaskActivity.this, res), 1);
             }
         });
         submit.setOnClickListener(new View.OnClickListener() {
@@ -134,11 +137,10 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         path = data.getStringExtra("path");
         String dataStringExtra = data.getStringExtra("date");
         Bitmap bmp = null;
-        //loader.displayImage(ImageDownloader.Scheme.FILE.wrap(path), pictureTask);
         if (resultCode == RESULT_OK) {
-            // Read the jpeg data
             jpegData = App.getInstance().getCapturedPhotoData();
-            bmp = BitmapFactory.decodeByteArray(jpegData, 0, jpegData.length);
+            bmp = Util.decodeSampledBitmapFromResourceMemOpt(jpegData, pictureTask.getWidth(),
+                    pictureTask.getHeight());
 
             App.getInstance().setCapturedPhotoData(null);
         }
@@ -160,13 +162,6 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         }
     }
 
-    private int dpToPxConverter(int dp) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                this.getResources().getDisplayMetrics()
-        );
-    }
 
     private void setIntentExtra() {
         Intent intent = getIntent();

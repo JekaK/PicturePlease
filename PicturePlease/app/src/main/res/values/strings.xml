@@ -9,5 +9,5 @@
     <string name="ALL">all</string>
     <string name="Desc">Your description about travel</string>
     <string name="People">People, that be with You</string>
-
+    <string name="CAMERA_IMAGE">/sdcard/DCIM/Camera/</string>
 </resources>
