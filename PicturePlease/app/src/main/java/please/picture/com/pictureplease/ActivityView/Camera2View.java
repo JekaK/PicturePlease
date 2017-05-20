@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import please.picture.com.pictureplease.GPSTracker;
+import please.picture.com.pictureplease.GPS.GPSTracker;
 import please.picture.com.pictureplease.R;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

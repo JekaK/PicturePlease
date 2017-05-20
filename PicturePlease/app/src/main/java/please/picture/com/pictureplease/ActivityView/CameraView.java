@@ -1,11 +1,8 @@
 package please.picture.com.pictureplease.ActivityView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
@@ -13,7 +10,6 @@ import android.view.SurfaceView;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.view.View;
 
 import android.hardware.Camera;
@@ -21,12 +17,11 @@ import android.hardware.Camera.Size;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import please.picture.com.pictureplease.GPSTracker;
+import please.picture.com.pictureplease.GPS.GPSTracker;
 import please.picture.com.pictureplease.R;
 
 /**

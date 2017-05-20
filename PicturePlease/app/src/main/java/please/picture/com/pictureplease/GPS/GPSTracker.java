@@ -1,11 +1,10 @@
-package please.picture.com.pictureplease;
+package please.picture.com.pictureplease.GPS;
 
 /**
  * Created by jeka on 20.05.17.
  */
 
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
@@ -29,15 +28,13 @@ public class GPSTracker extends Service implements LocationListener {
     // flag for GPS status
     boolean isGPSEnabled = false;
 
-    // flag for network status
     boolean isNetworkEnabled = false;
 
-    // flag for GPS status
     boolean canGetLocation = false;
 
-    Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
+    Location location;
+    double latitude;
+    double longitude;
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
 
