@@ -74,6 +74,9 @@ public class SessionManager {
         return user;
     }
 
+    public String getUserId() {
+        return String.valueOf(pref.getInt(KEY_ID, 0));
+    }
 
     public void logoutUser() {
         editor.clear();

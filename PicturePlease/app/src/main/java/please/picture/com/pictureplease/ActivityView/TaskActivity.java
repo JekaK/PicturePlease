@@ -1,47 +1,39 @@
 package please.picture.com.pictureplease.ActivityView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.download.ImageDownloader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import please.picture.com.pictureplease.AlertDialogs.DescriptionDialog;
 import please.picture.com.pictureplease.AlertDialogs.PeopleAddDialog;
+import please.picture.com.pictureplease.CacheTasks.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
+import please.picture.com.pictureplease.NetworkRequests.CheckTaskRequest;
 import please.picture.com.pictureplease.R;
+import please.picture.com.pictureplease.Session.SessionManager;
 import please.picture.com.pictureplease.Util.Parser;
 import please.picture.com.pictureplease.Util.Util;
-
-import static android.R.attr.bitmap;
-import static android.bluetooth.BluetoothClass.Service.CAPTURE;
-import static please.picture.com.pictureplease.R.id.imageView;
 
 /**
  * Created by jeka on 04.05.17.
@@ -51,7 +43,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
     private Toolbar toolbar;
     private CardView submit;
     private TextView title, date, people, description;
-    private String PEOPLE, DESC, dateS, peopleS, descriptionS, streetS, path;
+    private String PEOPLE, DESC, dateS, peopleS, descriptionS, streetS, path, latitude, longitude;
     private ImageView back, pictureTask;
     private ImageLoader loader;
     private byte[] jpegData;
@@ -112,12 +104,41 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                File f = new File(TaskActivity.this.getCacheDir(), "res");
                 try {
-                    if (jpegData != null || path != null)
-                        save(jpegData, new File(path));
+                    FileOutputStream fos = new FileOutputStream(f);
+                    fos.write(jpegData);
+                    fos.flush();
+                    fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                new CheckTaskRequest(TaskActivity.this, getResources().getString(R.string.BASE_URL))
+                        .sendCheckTaskRequest2(new SessionManager(TaskActivity.this).getUserId(),
+                                String.valueOf(getIntent().getIntExtra("id_place", 0)), latitude, longitude,
+                                f, date.getText().toString(), people.getText().toString(), description.getText().toString(),
+                                new CheckTaskRequest.onResultSend() {
+                                    @Override
+                                    public void onResult(String res) {
+                                        if (res.equals("Ok")) {
+                                            TasksCache cache = new TasksCache(TaskActivity.this, getResources().getString(R.string.ALL));
+                                            cache.deleteTasks();
+                                            try {
+                                                if (jpegData != null || path != null)
+                                                    save(jpegData, new File(path));
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                            Intent intent = new Intent(TaskActivity.this, MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(TaskActivity.this, res, Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
             }
         });
         setIntentExtra();
@@ -141,6 +162,8 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
             jpegData = App.getInstance().getCapturedPhotoData();
             bmp = Util.decodeSampledBitmapFromResourceMemOpt(jpegData, pictureTask.getWidth(),
                     pictureTask.getHeight());
+            latitude = String.valueOf(data.getDoubleExtra("latitude", 0));
+            longitude = String.valueOf(data.getDoubleExtra("longitude", 0));
 
             App.getInstance().setCapturedPhotoData(null);
         }
@@ -154,7 +177,6 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         try {
             output = new FileOutputStream(file);
             output.write(bytes);
-            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         } finally {
             if (null != output) {
                 output.close();

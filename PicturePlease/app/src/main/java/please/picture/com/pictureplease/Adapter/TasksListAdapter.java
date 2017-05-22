@@ -83,6 +83,7 @@ public class TasksListAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, TaskActivity.class);
+                intent.putExtra("id_place", tasks.get(position).getIdPlace());
                 intent.putExtra("name", tasks.get(position).getName());
                 intent.putExtra("street", tasks.get(position).getStreet());
                 intent.putExtra("date", tasks.get(position).getDate());

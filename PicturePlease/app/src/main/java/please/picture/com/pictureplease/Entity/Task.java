@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Task {
+    @SerializedName("id_place")
+    @Expose
+    private Integer idPlace;
     @SerializedName("Name")
     @Expose
     private String name;
@@ -27,13 +30,22 @@ public class Task {
     @Expose
     private String description;
 
-    public Task(String name, String street, String photo, String date, String people, String description) {
+    public Task(Integer idPlace, String name, String street, String photo, String date, String people, String description) {
+        this.idPlace = idPlace;
         this.name = name;
         this.street = street;
         this.photo = photo;
         this.date = date;
         this.people = people;
         this.description = description;
+    }
+
+    public Integer getIdPlace() {
+        return idPlace;
+    }
+
+    public void setIdPlace(Integer idPlace) {
+        this.idPlace = idPlace;
     }
 
     public String getName() {
