@@ -3,6 +3,7 @@ package please.picture.com.pictureplease.ActivityView;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,8 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import please.picture.com.pictureplease.CacheTasks.TasksCache;
+import please.picture.com.pictureplease.Cache.RatingCache;
+import please.picture.com.pictureplease.Cache.TasksCache;
 import please.picture.com.pictureplease.CustomView.RoundedImageView;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         fragments = new Fragment[]{new TaskFragment(), new RatingFragment()};
         transactFragment = fragments[0];
         createTransaction(transactFragment);
-    }
 
+    }
 
 
     private void createSession() {
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                         .getThumbnail(user.get(SessionManager.KEY_PHOTO));
                 photoUser.setImageBitmap(b);
                 navHeader.setBackgroundResource(R.drawable.gradient);
-                //photoUser.setScaleType(ImageView.ScaleType.FIT_XY);
             }
 
             initTextViewHeaderContent(user.get(SessionManager.KEY_LOGIN), user.get(SessionManager.KEY_EMAIL));
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         title.setLayoutParams(layoutParams);
         title.setTextColor(Color.WHITE);
         title.setTextSize(20);
+        title.setTypeface(null, Typeface.BOLD_ITALIC);
         toolbar.addView(title);
     }
 
@@ -172,6 +174,9 @@ public class MainActivity extends AppCompatActivity {
                 sessionManager.logoutUser();
                 TasksCache tasksCache =
                         new TasksCache(this, getResources().getString(R.string.ALL));
+                RatingCache ratingCache =
+                        new RatingCache(this, getResources().getString(R.string.RATING));
+                ratingCache.deleteTasks();
                 tasksCache.deleteTasks();
                 Intent i = new Intent(this, LogInActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import please.picture.com.pictureplease.Adapter.TasksListAdapter;
-import please.picture.com.pictureplease.CacheTasks.TasksCache;
+import please.picture.com.pictureplease.Cache.TasksCache;
 import please.picture.com.pictureplease.R;
 
 /**

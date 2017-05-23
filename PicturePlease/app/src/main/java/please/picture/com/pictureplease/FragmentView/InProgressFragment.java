@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import please.picture.com.pictureplease.Adapter.TasksListAdapter;
-import please.picture.com.pictureplease.CacheTasks.TasksCache;
+import please.picture.com.pictureplease.Cache.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;

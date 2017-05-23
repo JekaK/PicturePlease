@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
-import please.picture.com.pictureplease.Asynk.LogInRetrofitAsynk;
+import please.picture.com.pictureplease.IAsynk.LogInRetrofitAsynk;
 import please.picture.com.pictureplease.Callback.callback;
 import please.picture.com.pictureplease.Entity.User;
 import retrofit2.Call;

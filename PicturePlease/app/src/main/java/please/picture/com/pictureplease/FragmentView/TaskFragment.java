@@ -2,6 +2,7 @@ package please.picture.com.pictureplease.FragmentView;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -23,7 +24,7 @@ import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
 import please.picture.com.pictureplease.Adapter.FragmentAdapter;
-import please.picture.com.pictureplease.CacheTasks.TasksCache;
+import please.picture.com.pictureplease.Cache.TasksCache;
 import please.picture.com.pictureplease.Entity.Task;
 import please.picture.com.pictureplease.NetworkRequests.TaskListRequest;
 import please.picture.com.pictureplease.R;
@@ -43,6 +44,7 @@ public class TaskFragment extends Fragment {
     private HashMap<String, String> user;
     private List<Task> tasksInPr, tasksDone;
     private TasksCache tasksCache;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class TaskFragment extends Fragment {
         }
         customizeTab();
         initDivider();
+
         return root;
     }
 
@@ -112,6 +115,7 @@ public class TaskFragment extends Fragment {
                     LayoutInflater.from(getActivity()).inflate(R.layout.tab_layout, tabLayout, false);
             TextView tabTextView = (TextView) relativeLayout.findViewById(R.id.tab_title);
             tabTextView.setText(tab.getText());
+            tabTextView.setTypeface(null, Typeface.BOLD);
             tab.setCustomView(relativeLayout);
         }
     }
@@ -120,7 +124,7 @@ public class TaskFragment extends Fragment {
         tabLayout.setBackgroundResource(R.drawable.gradient);
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
-        tabLayout.setSelectedTabIndicatorHeight(5);
+        tabLayout.setSelectedTabIndicatorHeight(12);
     }
 
     @Override

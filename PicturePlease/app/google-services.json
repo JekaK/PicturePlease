@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "510464167776",
+    "firebase_url": "https://pictureplease-f2ae1.firebaseio.com",
+    "project_id": "pictureplease-f2ae1",
+    "storage_bucket": "pictureplease-f2ae1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510464167776:android:ed5d409b28dad041",
+        "android_client_info": {
+          "package_name": "please.picture.com.pictureplease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510464167776-u9t5u74kr6300jfb0tn7odg7hptnrbj0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "please.picture.com.pictureplease",
+            "certificate_hash": "0d45d75bd89ce93f9b04a5477cf5f85809d44366"
+          }
+        },
+        {
+          "client_id": "510464167776-gqc8jmq2gi0o8ke8um0mvcckc6qid9fl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbdk1F3kmef7IA6fP5J3bw11N15Rthlds"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510464167776-gqc8jmq2gi0o8ke8um0mvcckc6qid9fl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

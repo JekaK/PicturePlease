@@ -33,6 +33,7 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
     private ImageView shotBtn;
+    private GPSTracker gps;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,10 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
         surfaceHolder = preview.getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
+        gps = new GPSTracker(this);
+        if (!gps.canGetLocation()) {
+            gps.showSettingsAlert();
+        }
         shotBtn = (ImageView) findViewById(R.id.camera_button);
         shotBtn.setOnClickListener(this);
     }
@@ -136,20 +140,18 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
             intent.putExtra("path",
                     res);
             intent.putExtra("date", currentDateandTime);
-            GPSTracker gps = new GPSTracker(this);
-            double latitude = -1, longitude = -1;
-            if (gps.canGetLocation()) {
-                latitude = gps.getLatitude();
-                longitude = gps.getLongitude();
-            } else {
-                gps.showSettingsAlert();
-            }
+
+            double latitude, longitude;
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             App.getInstance().setCapturedPhotoData(paramArrayOfByte);
             setResult(RESULT_OK, intent);
             finish();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

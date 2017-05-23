@@ -38,14 +38,12 @@ public class TasksListAdapter extends ArrayAdapter {
     private List<Task> tasks;
     private ImageLoader loader;
     private DisplayImageOptions options;
-    private ProgressBar spinner;
 
     public TasksListAdapter(Activity context, List<Task> tasks) {
         super(context, R.layout.task_card, tasks);
         this.context = context;
         this.tasks = tasks;
         loader = ImageLoader.getInstance();
-        spinner = new ProgressBar(context);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .memoryCacheExtraOptions(480, 800)
                 .discCacheExtraOptions(480, 800, null)

@@ -1,4 +1,4 @@
-package please.picture.com.pictureplease.Asynk;
+package please.picture.com.pictureplease.IAsynk;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

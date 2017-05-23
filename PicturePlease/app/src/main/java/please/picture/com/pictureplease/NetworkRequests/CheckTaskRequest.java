@@ -3,11 +3,8 @@ package please.picture.com.pictureplease.NetworkRequests;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -15,19 +12,13 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import please.picture.com.pictureplease.Asynk.CheckRetrofitAsynk;
-import please.picture.com.pictureplease.Asynk.LogInRetrofitAsynk;
-import please.picture.com.pictureplease.Entity.User;
+import please.picture.com.pictureplease.IAsynk.CheckRetrofitAsynk;
 import please.picture.com.pictureplease.R;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.Part;
 
 /**
  * Created by jeka on 22.05.17.

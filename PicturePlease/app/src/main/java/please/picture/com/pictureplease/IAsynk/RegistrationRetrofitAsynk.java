@@ -1,8 +1,6 @@
-package please.picture.com.pictureplease.Asynk;
+package please.picture.com.pictureplease.IAsynk;
 
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

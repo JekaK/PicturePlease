@@ -1,4 +1,4 @@
-package please.picture.com.pictureplease.CacheTasks;
+package please.picture.com.pictureplease.Cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package please.picture.com.pictureplease.Asynk;
+package please.picture.com.pictureplease.IAsynk;
 
 import please.picture.com.pictureplease.Entity.User;
 import retrofit2.Call;

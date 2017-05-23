@@ -23,12 +23,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import please.picture.com.pictureplease.AlertDialogs.DescriptionDialog;
 import please.picture.com.pictureplease.AlertDialogs.PeopleAddDialog;
-import please.picture.com.pictureplease.CacheTasks.TasksCache;
-import please.picture.com.pictureplease.Entity.Task;
+import please.picture.com.pictureplease.Cache.TasksCache;
 import please.picture.com.pictureplease.NetworkRequests.CheckTaskRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -55,7 +53,6 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         initToolbar();
         setSupportActionBar(toolbar);
         initView();
-        initListeners();
     }
 
     private void initToolbar() {
@@ -89,18 +86,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
 
         pictureTask = (ImageView) findViewById(R.id.place_picture_task);
         pictureTask.setScaleType(ImageView.ScaleType.FIT_XY);
-        pictureTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Class res;
-                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    res = CameraView.class;
-                } else {
-                    res = Camera2View.class;
-                }
-                startActivityForResult(new Intent(TaskActivity.this, res), 1);
-            }
-        });
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,8 +127,8 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
                                 });
             }
         });
-        setIntentExtra();
 
+        setIntentExtra();
         loader = ImageLoader.getInstance();
         loader.displayImage(getIntent().getStringExtra("photo"), pictureTask);
         place.setText(streetS);
@@ -197,7 +183,22 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         if (dateS != null) {
             date.setText(dateS);
             submit.setVisibility(View.GONE);
-        } else date.setText("Your date");
+        } else {
+            date.setText("Your date");
+            initListeners();
+            pictureTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Class res;
+                    if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        res = CameraView.class;
+                    } else {
+                        res = Camera2View.class;
+                    }
+                    startActivityForResult(new Intent(TaskActivity.this, res), 1);
+                }
+            });
+        }
         if (peopleS != null)
             people.setText(peopleS);
         else people.setText(PEOPLE);

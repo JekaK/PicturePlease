@@ -2,7 +2,7 @@ package please.picture.com.pictureplease.NetworkRequests;
 
 import java.util.List;
 
-import please.picture.com.pictureplease.Asynk.TasksRetrofitAsynk;
+import please.picture.com.pictureplease.IAsynk.TasksRetrofitAsynk;
 import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.Entity.Task;
 import retrofit2.Call;
@@ -38,7 +38,6 @@ public class TaskListRequest {
         call.enqueue(new Callback<TasksRetrofitAsynk.TasksStruct>() {
             @Override
             public void onResponse(Call<TasksRetrofitAsynk.TasksStruct> call, Response<TasksRetrofitAsynk.TasksStruct> response) {
-
                 callback.afterLoad(response.body().getInProgress(), response.body().getDone());
             }
 

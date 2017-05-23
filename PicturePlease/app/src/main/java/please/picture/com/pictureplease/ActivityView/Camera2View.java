@@ -86,6 +86,10 @@ public class Camera2View extends AppCompatActivity {
         textureView.setSurfaceTextureListener(textureListener);
         takePictureButton = (ImageView) findViewById(R.id.btn_takepicture);
         assert takePictureButton != null;
+        final GPSTracker gps = new GPSTracker(Camera2View.this);
+        if (!gps.canGetLocation()) {
+            gps.showSettingsAlert();
+        }
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,14 +101,10 @@ public class Camera2View extends AppCompatActivity {
                         String currentDateandTime = sdf.format(new Date());
                         intent.putExtra("path",
                                 res);
-                        GPSTracker gps = new GPSTracker(Camera2View.this);
-                        double latitude = -1, longitude = -1;
-                        if (gps.canGetLocation()) {
-                            latitude = gps.getLatitude();
-                            longitude = gps.getLongitude();
-                        } else {
-                            gps.showSettingsAlert();
-                        }
+                        gps.getLocation();
+                        double latitude, longitude;
+                        latitude = gps.getLatitude();
+                        longitude = gps.getLongitude();
                         intent.putExtra("latitude", latitude);
                         intent.putExtra("longitude", longitude);
                         intent.putExtra("date", currentDateandTime);

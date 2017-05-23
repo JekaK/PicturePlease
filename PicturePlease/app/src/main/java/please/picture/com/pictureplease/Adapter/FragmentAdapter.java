@@ -40,10 +40,10 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0: {
-                return "In progress";
+                return "IN PROGRESS";
             }
             case 1: {
-                return "Done";
+                return "DONE";
             }
         }
         return null;
