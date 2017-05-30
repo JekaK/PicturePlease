@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
-        android:layout_width="165dp"
+        android:layout_width="150dp"
         android:layout_height="150dp"
         app:cardPreventCornerOverlap="false"
         app:cardElevation="3dp"
@@ -23,7 +23,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/photo" />
+                app:srcCompat="@drawable/picture" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/blacked"

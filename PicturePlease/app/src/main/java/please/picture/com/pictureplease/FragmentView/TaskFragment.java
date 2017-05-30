@@ -73,7 +73,6 @@ public class TaskFragment extends Fragment {
         }
         customizeTab();
         initDivider();
-
         return root;
     }
 
@@ -124,7 +123,7 @@ public class TaskFragment extends Fragment {
         tabLayout.setBackgroundResource(R.drawable.gradient);
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
-        tabLayout.setSelectedTabIndicatorHeight(12);
+        tabLayout.setSelectedTabIndicatorHeight(8);
     }
 
     @Override

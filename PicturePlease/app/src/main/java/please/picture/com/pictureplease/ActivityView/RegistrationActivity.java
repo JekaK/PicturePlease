@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.NetworkRequests.RegistrationRequest;
 import please.picture.com.pictureplease.R;
+import please.picture.com.pictureplease.Util.Util;
 
 /**
  * Created by jeka on 29.04.17.
@@ -32,7 +34,11 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setStrings();
-                registrationRequest.createUser(emailStr, loginStr, passStr);
+                if ((passStr.equals(passAgainStr)) && Util.isValidEmail(emailStr))
+                    registrationRequest.createUser(emailStr, loginStr, passStr);
+                else {
+                    Toast.makeText(RegistrationActivity.this, "Email not valid or passes don't matches!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

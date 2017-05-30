@@ -59,6 +59,7 @@ public class TasksListAdapter extends ArrayAdapter {
                 .resetViewBeforeLoading()
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
+                .resetViewBeforeLoading(true)
                 .build();
         loader.init(config);
     }

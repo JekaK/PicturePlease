@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import please.picture.com.pictureplease.ActivityView.MainActivity;
@@ -71,6 +72,16 @@ public class RatingFragment extends Fragment {
             @Override
             public void onRatingResponse(List<Rating> ratingStructs) {
                 ratings = ratingStructs;
+                cache.deleteTasks();
+                cache.saveTasks(ratings);
+                adapter = new RatingAdapter(getActivity(), cache.getRatings());
+                listView.setAdapter(adapter);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onRatingEmpty() {
+                ratings = new ArrayList<Rating>();
                 cache.deleteTasks();
                 cache.saveTasks(ratings);
                 adapter = new RatingAdapter(getActivity(), cache.getRatings());

@@ -140,7 +140,7 @@ public class CameraView extends AppCompatActivity implements SurfaceHolder.Callb
             intent.putExtra("path",
                     res);
             intent.putExtra("date", currentDateandTime);
-
+            gps.getLocation();
             double latitude, longitude;
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();

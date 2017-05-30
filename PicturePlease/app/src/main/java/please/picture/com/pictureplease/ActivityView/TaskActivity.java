@@ -16,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import please.picture.com.pictureplease.AlertDialogs.DescriptionDialog;
 import please.picture.com.pictureplease.AlertDialogs.PeopleAddDialog;
 import please.picture.com.pictureplease.Cache.TasksCache;
+import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.NetworkRequests.CheckTaskRequest;
 import please.picture.com.pictureplease.R;
 import please.picture.com.pictureplease.Session.SessionManager;
@@ -41,7 +45,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
     private Toolbar toolbar;
     private CardView submit;
     private TextView title, date, people, description;
-    private String PEOPLE, DESC, dateS, peopleS, descriptionS, streetS, path, latitude, longitude;
+    private String PEOPLE, DESC, dateS, peopleS, descriptionS, streetS, path, latitude, longitude, idPlace;
     private ImageView back, pictureTask;
     private ImageLoader loader;
     private byte[] jpegData;
@@ -53,6 +57,12 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         initToolbar();
         setSupportActionBar(toolbar);
         initView();
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void initToolbar() {
@@ -77,7 +87,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
         title.setText(getIntent().getStringExtra("name"));
         people = (TextView) findViewById(R.id.people_text);
         date = (TextView) findViewById(R.id.date_text);
-
+        idPlace = String.valueOf(getIntent().getIntExtra("id_place", 0));
         TextView place = (TextView) findViewById(R.id.place_text);
 
         description = (TextView) findViewById(R.id.description);
@@ -117,6 +127,9 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
                                                 e.printStackTrace();
                                             }
                                             Intent intent = new Intent(TaskActivity.this, MainActivity.class);
+                                            String s = Constants.BASE_URL.concat("/User/Done/" + new SessionManager(TaskActivity.this).getUserId() + idPlace + ".jpg");
+                                            MemoryCacheUtils.removeFromCache(s, loader.getMemoryCache());
+                                            DiskCacheUtils.removeFromCache(s, loader.getDiskCache());
                                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             startActivity(intent);
                                             finish();
@@ -223,12 +236,7 @@ public class TaskActivity extends AppCompatActivity implements PeopleAddDialog.P
                 descriptionDialog.show(getFragmentManager(), "DESCRIPTION");
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
     }
 
     @Override

@@ -29,7 +29,7 @@
         android:bottomLeftRadius="8dp"
         android:bottomRightRadius="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:text="krukun1998@gmail.com"
         android:textColor="#ffffff"
         android:topLeftRadius="8dp"

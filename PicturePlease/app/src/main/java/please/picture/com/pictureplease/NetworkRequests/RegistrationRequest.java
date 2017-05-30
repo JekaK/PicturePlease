@@ -55,7 +55,7 @@ public class RegistrationRequest {
                         login,
                         email,
                         pass,
-                        "none");
+                        null);
                 context.startActivity(intent);
                 ((AppCompatActivity) context).finish();
             }

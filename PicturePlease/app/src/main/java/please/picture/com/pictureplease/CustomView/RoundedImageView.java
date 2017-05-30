@@ -12,11 +12,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 /**
  * Created by jeka on 06.05.17.
  */
-public class RoundedImageView extends AppCompatImageView {
+public class RoundedImageView extends ImageView {
 
     public RoundedImageView(Context context) {
         super(context);

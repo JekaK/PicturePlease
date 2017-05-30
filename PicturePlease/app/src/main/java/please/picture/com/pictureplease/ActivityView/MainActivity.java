@@ -1,5 +1,6 @@
 package please.picture.com.pictureplease.ActivityView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,18 +17,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.utils.DiskCacheUtils;
+import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 
 import please.picture.com.pictureplease.Cache.RatingCache;
 import please.picture.com.pictureplease.Cache.TasksCache;
+import please.picture.com.pictureplease.Constants.Constants;
 import please.picture.com.pictureplease.CustomView.RoundedImageView;
 import please.picture.com.pictureplease.FragmentView.RatingFragment;
 import please.picture.com.pictureplease.FragmentView.TaskFragment;
+import please.picture.com.pictureplease.NetworkRequests.UpdateUserPhotoRequest;
 import please.picture.com.pictureplease.R;
-import please.picture.com.pictureplease.SavedPreferences.BitmapOperations;
 import please.picture.com.pictureplease.Session.SessionManager;
+
+import static com.nostra13.universalimageloader.utils.DiskCacheUtils.findInCache;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, String> user;
     private Fragment transactFragment;
     private Fragment[] fragments;
+    private String userId;
+    private ImageLoader loader;
+    private DisplayImageOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
         setSupportActionBar(toolbar);
         initSession();
+        initImageLoader();
         setUpDrawerToogle();
         createSession();
         fragments = new Fragment[]{new TaskFragment(), new RatingFragment()};
@@ -69,14 +94,48 @@ public class MainActivity extends AppCompatActivity {
         } else {
             navHeader = nvDrawer.getHeaderView(0);
             photoUser = (RoundedImageView) navHeader.findViewById(R.id.photoUser);
-            HashMap<String, String> user = sessionManager.getUserDetails();
-            if (user.get("photo").equals("desiredFilename.jpg")) {
-                Bitmap b = new BitmapOperations(getApplicationContext())
-                        .getThumbnail(user.get(SessionManager.KEY_PHOTO));
-                photoUser.setImageBitmap(b);
-                navHeader.setBackgroundResource(R.drawable.gradient);
-            }
+            photoUser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, 1);
+                }
+            });
+            user = sessionManager.getUserDetails();
+            userId = user.get(SessionManager.KEY_ID);
+            if (user.get(SessionManager.KEY_PHOTO) != null)
+                loader.displayImage(Constants.BASE_URL.concat(user.get(SessionManager.KEY_PHOTO)),
+                        photoUser, new SimpleImageLoadingListener() {
+                            boolean cacheFound;
 
+                            @Override
+                            public void onLoadingStarted(String url, View view) {
+                                List<String> memCache = MemoryCacheUtils.findCacheKeysForImageUri(url, ImageLoader.getInstance().getMemoryCache());
+                                cacheFound = !memCache.isEmpty();
+                                if (!cacheFound) {
+                                    File discCache = findInCache(url, ImageLoader.getInstance().getDiscCache());
+                                    if (discCache != null) {
+                                        cacheFound = discCache.exists();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                                if (cacheFound) {
+                                    MemoryCacheUtils.removeFromCache(imageUri, loader.getMemoryCache());
+                                    DiskCacheUtils.removeFromCache(imageUri, loader.getDiskCache());
+                                    File imageFile = loader.getDiscCache().get(imageUri);
+                                    if (imageFile.exists()) {
+                                        imageFile.delete();
+                                    }
+
+                                    ImageLoader.getInstance().displayImage(imageUri, (ImageView) view);
+                                }
+                            }
+                        });
+            navHeader.setBackgroundResource(R.drawable.gradient);
             initTextViewHeaderContent(user.get(SessionManager.KEY_LOGIN), user.get(SessionManager.KEY_EMAIL));
         }
     }
@@ -90,6 +149,23 @@ public class MainActivity extends AppCompatActivity {
         title.setTextSize(20);
         title.setTypeface(null, Typeface.BOLD_ITALIC);
         toolbar.addView(title);
+    }
+
+    private void initImageLoader() {
+
+        loader = ImageLoader.getInstance();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .memoryCacheExtraOptions(480, 800)
+                .discCacheExtraOptions(480, 800, null)
+                .threadPoolSize(5)
+                .threadPriority(Thread.MIN_PRIORITY + 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024 * 1024))
+                .discCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .imageDownloader(new BaseImageDownloader(this))
+                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+                .build();
+        loader.init(config);
     }
 
     private void initTextViewHeaderContent(String loginString, String emailString) {
@@ -212,5 +288,44 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            try {
+                InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
+                File targetFile = new File(this.getCacheDir(), "r");
+                OutputStream outStream = new FileOutputStream(targetFile);
+
+                final byte[] buffer = new byte[8 * 1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, bytesRead);
+                }
+                inputStream.close();
+                outStream.close();
+                UpdateUserPhotoRequest request = new UpdateUserPhotoRequest(this);
+                request.updateUserPhoto(userId, targetFile, new UpdateUserPhotoRequest.UserPhotoUpdate() {
+                    @Override
+                    public void onPhotoUpdate(String s) {
+                        if (user.get(SessionManager.KEY_PHOTO) == null) {
+                            sessionManager.updateUserPhoto("/User/" + sessionManager.getUserId() + ".jpg");
+                        }
+                        user = sessionManager.getUserDetails();
+                        String s1 = Constants.BASE_URL.concat(user.get(SessionManager.KEY_PHOTO));
+                        System.out.println(s1);
+                        loader.displayImage(Constants.BASE_URL.concat(user.get(SessionManager.KEY_PHOTO)),
+                                photoUser);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

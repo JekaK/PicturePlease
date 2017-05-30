@@ -26,7 +26,6 @@ public class SessionManager {
 
     private static final String IS_LOGIN = "IsLoggedIn";
 
-//{"id_user":9,"login_name":"Loud","email":"krukun1998@gmail.com","pass":"1","Photo":"/User/9.jpg"}
 
     public static final String KEY_ID = "id";
 
@@ -92,6 +91,11 @@ public class SessionManager {
             context.startActivity(i);
             ((AppCompatActivity) context).finish();
         }
+    }
+
+    public void updateUserPhoto(String s) {
+        editor.putString(KEY_PHOTO, s);
+        editor.commit();
     }
 
     public boolean isLoggedIn() {

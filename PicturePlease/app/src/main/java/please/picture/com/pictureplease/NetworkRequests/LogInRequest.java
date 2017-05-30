@@ -60,42 +60,16 @@ public class LogInRequest {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 user[0] = response.body();
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request request = new Request.Builder()
-                        .url(baseUrl.concat(response.body().getPhoto()))
-                        .build();
-                okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-                    @Override
-                    public void onFailure(okhttp3.Call call, IOException e) {
-                    }
-
-                    @Override
-                    public void onResponse(okhttp3.Call call, final okhttp3.Response response) throws IOException {
-                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        new BitmapOperations(context, bitmap).
-                                saveImage(new callback() {
-                                    @Override
-                                    public void getUserInfo(Integer integer, ProgressDialog dialog) {
-
-                                    }
-
-                                    @Override
-                                    public void done() {
-                                        progressDialog.dismiss();
-                                        Intent intent = new Intent(context, MainActivity.class);
-                                        manager = new SessionManager(context);
-                                        manager.createLoginSession(user[0].getIdUser(),
-                                                user[0].getLoginName(),
-                                                user[0].getEmail(),
-                                                user[0].getPass(),
-                                                "desiredFilename.jpg");
-                                        context.startActivity(intent);
-                                        ((AppCompatActivity) context).finish();
-                                    }
-                                });
-                    }
-                });
-
+                progressDialog.dismiss();
+                Intent intent = new Intent(context, MainActivity.class);
+                manager = new SessionManager(context);
+                manager.createLoginSession(user[0].getIdUser(),
+                        user[0].getLoginName(),
+                        user[0].getEmail(),
+                        user[0].getPass(),
+                        user[0].getPhoto());
+                context.startActivity(intent);
+                ((AppCompatActivity) context).finish();
             }
 
             @Override

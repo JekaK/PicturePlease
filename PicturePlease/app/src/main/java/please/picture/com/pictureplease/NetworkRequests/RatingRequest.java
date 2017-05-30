@@ -42,6 +42,7 @@ public class RatingRequest {
 
     public interface ratingCallback {
         public void onRatingResponse(List<Rating> ratingStructs);
+        public void onRatingEmpty();
     }
 
     public void getRating(final ratingCallback callback) {
@@ -59,7 +60,7 @@ public class RatingRequest {
 
             @Override
             public void onFailure(Call<RatingRetrofitAsynk.RatingStruct> call, Throwable t) {
-                Toast.makeText(context, "Oops. Something wrong", Toast.LENGTH_LONG).show();
+                callback.onRatingEmpty();
             }
         });
     }
